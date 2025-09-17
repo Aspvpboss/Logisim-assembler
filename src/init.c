@@ -108,8 +108,20 @@ int parse_command_args(Appstate *state, int argc, char *argv[], int *result){
     return 0;
 }
 
+
+
+
 int get_lines_file(FILE *file){
-    
+
+    char file_line[500];
+    int num_lines = 0;
+    while(fgets(file_line, sizeof(file_line), file)){
+        num_lines++;    
+    }
+
+    rewind(file);
+
+    return num_lines;
 }
 
 int open_files(File_Manager *manager, int *result){
@@ -117,6 +129,56 @@ int open_files(File_Manager *manager, int *result){
     File_Info *output = &manager->output;
     File_Info *inputs = manager->inputs;
     int amount_inputs = manager->amount_inputs;
+
+    output->file = fopen(output->path, "w");
+    if(output->file == NULL){
+        *result = 1;
+        return 1;
+    }
+    output->num_lines = get_lines_file(output->file);
+
+
+    for(int i = 0; i < amount_inputs; i++){
+        inputs[i].file = fopen(inputs[i].path, "r");
+        if(inputs[i].file == NULL){
+            *result = 2;
+            return 1;            
+        }
+
+        inputs[i].num_lines = get_lines_file(inputs[i].file);
+    }
+
+    return 0;
+}
+
+
+
+int read_files(File_Manager *manager, int *result){
+
+    char file_line[255];
+
+    for(int i = 0; i < manager->amount_inputs; i++){
+
+        char file_name[255];
+        manager->inputs[i].num_lines += 2;
+        manager->inputs[i].raw_text = malloc(sizeof(char*) * (manager->inputs[i].num_lines));
+
+
+        snprintf(file_name, sizeof(file_name), ".file start %s", manager->inputs[i].path);
+        manager->inputs[i].raw_text[0] = strdup(file_name);
+
+
+        for(int x = 1; x < manager->inputs[i].num_lines; x++){
+
+            fgets(file_line, sizeof(file_line), manager->inputs[i].file);
+            file_line[strcspn(file_line, "\n")] = '\0';
+            manager->inputs[i].raw_text[x] = strdup(file_line);
+
+        }
+
+        snprintf(file_name, sizeof(file_name), ".file end %s", manager->inputs[i].path);
+        manager->inputs[i].raw_text[manager->inputs[i].num_lines - 1] = strdup(file_name);
+    }
 
     return 0;
 }
@@ -127,6 +189,7 @@ int initialize(Appstate *state, int argc, char **argv){
     int result = 0;
 
     state->manager.inputs = NULL;
+    state->manager.output.raw_text = NULL;
     state->configs.output_type = NO_OUTPUT;
 
     if(parse_command_args(state, argc, argv, &result)){
@@ -137,6 +200,11 @@ int initialize(Appstate *state, int argc, char **argv){
     if(open_files(&state->manager, &result)){
         LogError(FILE_ERROR, result);
         return 1;
+    }
+
+    if(read_files(&state->manager, &result)){
+        LogError(FILE_ERROR, result);
+        return 1;        
     }
     
     return 0;

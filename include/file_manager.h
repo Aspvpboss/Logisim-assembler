@@ -4,9 +4,10 @@
 
 typedef struct{
 
+    char **raw_text;
     FILE *file;
     int num_lines;
-    const char *path;
+    char *path;
 
 } File_Info;
 

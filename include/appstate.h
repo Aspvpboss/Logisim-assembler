@@ -1,5 +1,9 @@
 #pragma once
 
+#include <ctype.h>
+#include <string.h>
+#include <stdlib.h>
+
 #include "file_manager.h"
 #include "assembler_configs.h"
 

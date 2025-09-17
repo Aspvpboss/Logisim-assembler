@@ -6,7 +6,7 @@ OUT = out.exe
 
 DEBUG = -ex "break main" -ex "run"
 
-COMMAND_ARGS = a.asm  b.asm -o c.txt -B
+COMMAND_ARGS = a.asm -o c.txt -B
 
 
 default: build run

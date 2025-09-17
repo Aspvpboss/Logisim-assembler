@@ -1,28 +1,47 @@
 #include "error.h"
+#include <string.h>
 
 void LogError(ErrorCode error, int code){
+
+    char error_string[100];
 
     switch(error){
 
         case(ASSEMBLE_ARGS_ERROR):
 
-            /*
-                0x1 - invalid command arg
-                0x2 - invalid output arg
-                0x3 - no output file
-                0x4 - no command args
-                0x5 - duplicate output type flags
-                0x6 - no output type flag
-            */
-            printf("Command prompt error: %#x\n", code);
+            
+            if(code == 1){
+                strcpy(error_string, "invalid command arg");
+            }
+            if(code == 2){
+                strcpy(error_string, "invalid output arg");
+            }
+            if(code == 3){
+                strcpy(error_string, "no output file");
+            }
+            if(code == 4){
+                strcpy(error_string, "no command args");
+            }
+            if(code == 5){
+                strcpy(error_string, "duplicate output type flags");
+            }
+            if(code == 6){
+                strcpy(error_string, "no output type flag");
+            }
+
+            printf("Command prompt error: %s\n", error_string);
             break;
 
         case(FILE_ERROR):
 
-            /*
-            
-            */
-            printf("File error: %#x\n", code);
+            if(code == 1){
+                strcpy(error_string, "failed to open output file");
+            }
+            if(code == 2){
+                strcpy(error_string, "failed to open an input file");
+            }            
+
+            printf("File error: %s\n", error_string);
             break;
 
         default:

@@ -1,4 +1,5 @@
 #include "init.h"
+#include "quit.h"
 
 int main(int argc, char **argv){
 
@@ -8,23 +9,19 @@ int main(int argc, char **argv){
         return 1;
     }
 
+    File_Manager *manager = &state.manager;
 
+    for(int i = 0; i < manager->amount_inputs; i++){
 
+        for(int x = 0; x < manager->inputs[i].num_lines; x++){
 
-    printf("output\n%s\n", state.manager.output.path);
+            printf("%s\n", manager->inputs[i].raw_text[x]);
 
-    printf("\ninputs\n");
-
-    for(int i = 0; i < state.manager.amount_inputs; i++){
-        printf("%s\n", state.manager.inputs[i].path);
+        }
     }
+    
 
-    if(state.configs.output_type == BINARY_OUTPUT){
-        printf("\nbinary output\n");
-    }
-    if(state.configs.output_type == HEX_OUTPUT){
-        printf("\nhex output\n");
-    }
+    quit(&state);
 
     return 0;
 }
