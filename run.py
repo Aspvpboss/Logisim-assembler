@@ -7,5 +7,5 @@ gcc = "C:\\MinGW\\bin\\gcc.exe"
 src = "src/*.c"
 include = "-Iinclude"
  
-subprocess.run(f"gcc -g -o out.exe {src} {include} && out.exe", shell=True)
-#subprocess.run(f"{gcc} -g -o out.exe {src} {include} && out.exe a.asm -o out.txt -B", shell=True)
+#subprocess.run(f"gcc -g -o out.exe {src} {include} && out.exe", shell=True)
+subprocess.run(f"{gcc} -g -o out.exe {src} {include} && out.exe a.asm -o out.txt -B", shell=True)
