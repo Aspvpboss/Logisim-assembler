@@ -11,4 +11,13 @@ typedef enum{
 } ErrorCode;
 
 
-void LogError(ErrorCode error, int code);
+typedef struct{
+
+    int code;
+    char *string;
+
+} ErrorData;
+
+
+void LogError(ErrorCode error, ErrorData *data);
+

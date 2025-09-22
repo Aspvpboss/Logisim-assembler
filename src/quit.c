@@ -1,22 +1,36 @@
 #include "quit.h"
 
 
-void free_manager(File_Manager *manager){
+void s_free(void *memory){
+
+    if(memory){
+        printf("%s\n", (char*)memory);
+        free(memory);
+    }
+    
+}
+
+
+void free_file_manager(File_Manager *manager){
 
     for (int i = 0; i < manager->amount_inputs; i++) {
         for (int x = 0; x < manager->inputs[i].num_lines; x++) {
-            free(manager->inputs[i].raw_text[x]);
+            if(manager->inputs[i].raw_text[x] && manager->inputs[i].raw_text)
+                s_free(manager->inputs[i].raw_text[x]);
         }
-        free(manager->inputs[i].raw_text);
-        free(manager->inputs[i].path);
-        fclose(manager->inputs[i].file);
+        s_free(manager->inputs[i].raw_text);
+        s_free(manager->inputs[i].path);
+        
+        if(manager->inputs[i].file)
+            fclose(manager->inputs[i].file);
     }
-    free(manager->inputs);
-    free(manager->output.path);
-    fclose(manager->output.file);
+    s_free(manager->inputs);
+    s_free(manager->output.path);
 
-    if(manager->output.raw_text)
-        free(manager->output.raw_text);
+    if(manager->output.file)
+        fclose(manager->output.file);
+        
+    s_free(manager->output.raw_text);
 
 }
 
@@ -24,25 +38,38 @@ void free_manager(File_Manager *manager){
 void free_tokenized_line(Token_Line *tl){
 
     for(int i = 0; i < tl->amount_tokens; i++){
-        free(tl->tk[i].text);
+        s_free(tl->tk[i].text);
     }
-    free(tl->tk);
-    free(tl->file);
+    s_free(tl->tk);
+    s_free(tl->path);
 }
 
 void free_tokenized_file(Token_File *tf){
     for(int i = 0; i < tf->amount_lines; i++){
-        free_tokenized_line(&tf->tk_line[i]);
+        free_tokenized_line(tf->tk_line[i]);
     }
-    free(tf->tk_line);
+    s_free(tf->tk_line);
 }
 
+void free_tok_file_manager(Token_File_Manager *manager){
+
+    if(manager->amount_files == 0){
+        return;
+    }
+
+    for(int i = 0; i < manager->amount_files; i++){
+        free_tokenized_file(manager->tk_files[i]);
+    }
+    s_free(manager->tk_files);
+}
 
 
 void quit(Appstate *state){
 
-    free_manager(&state->manager);
+    free_file_manager(&state->manager);
 
+    free_tok_file_manager(&state->tk_manager);
 
+    printf("freed memory properly\n");
 
 }

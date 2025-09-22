@@ -8,4 +8,4 @@ src = "src/*.c"
 include = "-Iinclude"
  
 #subprocess.run(f"gcc -g -o out.exe {src} {include} && out.exe", shell=True)
-subprocess.run(f"{gcc} -g -o out.exe {src} {include} && out.exe a.asm -o out.txt -B", shell=True)
+subprocess.run(f"{gcc}  -o out.exe {src} {include} && out.exe a.asm b.asm -o out.txt -B", shell=True)

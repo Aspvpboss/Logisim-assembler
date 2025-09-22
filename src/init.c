@@ -30,7 +30,7 @@ int validate_paths(const char *file_path, const char *file_type){
 
 
 
-int parse_command_args(Appstate *state, int argc, char *argv[], int *result){
+int parse_command_args(Appstate *state, int argc, char *argv[], ErrorData *error){
 
     File_Manager *manager = &state->manager;
     Assembler_Configs *configs = &state->configs;
@@ -39,7 +39,7 @@ int parse_command_args(Appstate *state, int argc, char *argv[], int *result){
     manager->output.path = NULL;
 
     if(argc <= 1){
-        *result = 4;
+        error->code = 4;
         return 1;
     }
 
@@ -48,7 +48,7 @@ int parse_command_args(Appstate *state, int argc, char *argv[], int *result){
         if(strcmp(argv[i], "-o") == 0 && i + 1 < argc){
 
             if(!validate_paths(argv[i + 1], ".txt")){
-                *result = 2;
+                error->code = 2;
                 return 1;
             }
 
@@ -61,7 +61,8 @@ int parse_command_args(Appstate *state, int argc, char *argv[], int *result){
 
         if(strcmp(argv[i], "-B") == 0){
             if(configs->output_type != NO_OUTPUT){
-                *result = 5;
+                error->code = 5;
+                error->string = strdup(argv[i]);
                 return 1;
             }
             configs->output_type = BINARY_OUTPUT;
@@ -70,7 +71,8 @@ int parse_command_args(Appstate *state, int argc, char *argv[], int *result){
 
         if(strcmp(argv[i], "-H") == 0){
             if(configs->output_type != NO_OUTPUT){
-                *result = 5;
+                error->code = 5;
+                error->string = strdup(argv[i]);
                 return 1;
             }
             configs->output_type = HEX_OUTPUT;
@@ -88,7 +90,8 @@ int parse_command_args(Appstate *state, int argc, char *argv[], int *result){
             continue;
         }
 
-        *result = 1;
+        error->code = 1;
+        error->string = strdup(argv[i]);
         return 1;
 
     }
@@ -96,12 +99,12 @@ int parse_command_args(Appstate *state, int argc, char *argv[], int *result){
     manager->amount_inputs = amount_inputs;
 
     if(manager->output.path == NULL){
-        *result = 3;
+        error->code = 3;
         return 1;
     }
 
     if(configs->output_type == NO_OUTPUT){
-        *result = 6;
+        error->code = 6;
         return 1;
     }
 
@@ -124,7 +127,7 @@ int get_lines_file(FILE *file){
     return num_lines;
 }
 
-int open_files(File_Manager *manager, int *result){
+int open_files(File_Manager *manager, ErrorData *error){
 
     File_Info *output = &manager->output;
     File_Info *inputs = manager->inputs;
@@ -132,16 +135,17 @@ int open_files(File_Manager *manager, int *result){
 
     output->file = fopen(output->path, "w");
     if(output->file == NULL){
-        *result = 1;
+        error->code = 1;
         return 1;
     }
-    output->num_lines = get_lines_file(output->file);
+    output->num_lines = 0;
 
 
     for(int i = 0; i < amount_inputs; i++){
         inputs[i].file = fopen(inputs[i].path, "r");
         if(inputs[i].file == NULL){
-            *result = 2;
+            error->code = 2;
+            error->string = strdup(inputs[i].path);
             return 1;            
         }
 
@@ -153,7 +157,7 @@ int open_files(File_Manager *manager, int *result){
 
 
 
-int read_files(File_Manager *manager, int *result){
+int read_files(File_Manager *manager, ErrorData *result){
 
     char file_line[255];
 
@@ -186,27 +190,30 @@ int read_files(File_Manager *manager, int *result){
 
 int initialize(Appstate *state, int argc, char **argv){
 
-    int result = 0;
+    ErrorData result;
+    result.string = NULL;
 
     state->manager.inputs = NULL;
     state->manager.output.raw_text = NULL;
     state->configs.output_type = NO_OUTPUT;
 
+
     if(parse_command_args(state, argc, argv, &result)){
-        LogError(ASSEMBLE_ARGS_ERROR, result);
+        LogError(ASSEMBLE_ARGS_ERROR, &result);
         return 1;
     }
 
     if(open_files(&state->manager, &result)){
-        LogError(FILE_ERROR, result);
+        LogError(FILE_ERROR, &result);
         return 1;
     }
 
     if(read_files(&state->manager, &result)){
-        LogError(FILE_ERROR, result);
+        LogError(FILE_ERROR, &result);
         return 1;        
     }
-    
+
+
     return 0;
 }
 

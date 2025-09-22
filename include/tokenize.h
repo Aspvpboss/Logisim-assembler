@@ -1,5 +1,4 @@
 #pragma once
-#include "appstate.h"
 
 enum Token_Type{
 
@@ -45,7 +44,7 @@ typedef struct{
 
     int amount_tokens;
     Token *tk;
-    char *file;
+    char *path;
     int original_line;
 
 } Token_Line;
@@ -53,7 +52,7 @@ typedef struct{
 
 typedef struct{
 
-    Token_Line *tk_line;
+    Token_Line **tk_line;
     int amount_lines;
     char *path;
 
@@ -63,9 +62,11 @@ typedef struct{
 
 typedef struct{
 
-
+    Token_File **tk_files;
+    int amount_files;
     
 } Token_File_Manager;
 
 
-int tokenize(Appstate *state);
+
+int tokenize(void *appstate);

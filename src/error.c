@@ -1,53 +1,72 @@
 #include "error.h"
+#include "quit.h"
 #include <string.h>
 
-void LogError(ErrorCode error, int code){
-
-    char error_string[100];
+void LogError(ErrorCode error, ErrorData *data){
 
     switch(error){
 
         case(ASSEMBLE_ARGS_ERROR):
 
-            
-            if(code == 1){
-                strcpy(error_string, "invalid command arg");
-            }
-            if(code == 2){
-                strcpy(error_string, "invalid output arg");
-            }
-            if(code == 3){
-                strcpy(error_string, "no output file");
-            }
-            if(code == 4){
-                strcpy(error_string, "no command args");
-            }
-            if(code == 5){
-                strcpy(error_string, "duplicate output type flags");
-            }
-            if(code == 6){
-                strcpy(error_string, "no output type flag");
+            switch(data->code){
+
+                case(1):
+                    printf("Command prompt error: invalid command arg '%s'\n", data->string);
+                    break;
+
+                case(2):
+                    printf("Command prompt error: invalid output arg '%s'\n", data->string);
+                    break;
+
+                case(3):
+                    printf("Command prompt error: no output file given\n");
+                    break;
+
+                case(4):
+                    printf("Command prompt error: no command args given\n");
+                    break;
+
+                case(5):
+                    printf("Command prompt error: duplicate output type flags '%s'\n", data->string);
+                    break;
+
+                case(6):
+                    printf("Command prompt error: no output type flag given\n");
+                    break;
+
             }
 
-            printf("Command prompt error: %s\n", error_string);
             break;
 
         case(FILE_ERROR):
 
-            if(code == 1){
-                strcpy(error_string, "failed to open output file");
-            }
-            if(code == 2){
-                strcpy(error_string, "failed to open an input file");
-            }            
+            switch(data->code){
+            
+                case(1):
+                    printf("File error: failed to open output file '%s'\n", data->string);
+                    break;
+            
+                case(2):
+                    printf("File error: failed to open an input file '%s'\n", data->string);
+                    break;
+            
+                case(3):
+                    printf("File error: an input file is empty\n");
+                    break;
 
-            printf("File error: %s\n", error_string);
+            }
+
             break;
 
         default:
 
             break;
 
+    }
+
+
+    if(data->string != NULL){
+        free(data->string);
     }
 
 }
