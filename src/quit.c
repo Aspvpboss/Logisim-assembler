@@ -4,7 +4,6 @@
 void s_free(void *memory){
 
     if(memory){
-        printf("%s\n", (char*)memory);
         free(memory);
     }
     
@@ -13,24 +12,22 @@ void s_free(void *memory){
 
 void free_file_manager(File_Manager *manager){
 
-    for (int i = 0; i < manager->amount_inputs; i++) {
-        for (int x = 0; x < manager->inputs[i].num_lines; x++) {
-            if(manager->inputs[i].raw_text[x] && manager->inputs[i].raw_text)
-                s_free(manager->inputs[i].raw_text[x]);
-        }
+    for(int i = 0; i < manager->amount_inputs; i++){
+
+        for(int x = 0; x < manager->inputs[i].num_lines; x++)
+            s_free(manager->inputs[i].raw_text[x]);
+
         s_free(manager->inputs[i].raw_text);
         s_free(manager->inputs[i].path);
-        
         if(manager->inputs[i].file)
             fclose(manager->inputs[i].file);
     }
+
     s_free(manager->inputs);
     s_free(manager->output.path);
-
+    s_free(manager->output.raw_text);
     if(manager->output.file)
         fclose(manager->output.file);
-        
-    s_free(manager->output.raw_text);
 
 }
 

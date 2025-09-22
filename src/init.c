@@ -49,11 +49,13 @@ int parse_command_args(Appstate *state, int argc, char *argv[], ErrorData *error
 
             if(!validate_paths(argv[i + 1], ".txt")){
                 error->code = 2;
+                error->string = strdup(argv[i]);
                 return 1;
             }
 
             manager->output.path = strdup(argv[i + 1]);
-
+            manager->output.file = NULL;
+            manager->output.num_lines = 0;
             i++;
 
             continue;
@@ -84,8 +86,11 @@ int parse_command_args(Appstate *state, int argc, char *argv[], ErrorData *error
             amount_inputs++;
 
             manager->inputs = realloc(manager->inputs, sizeof(File_Info) * amount_inputs);
-
             manager->inputs[amount_inputs - 1].path = strdup(argv[i]);
+            manager->inputs[amount_inputs - 1].file = NULL;
+            manager->inputs[amount_inputs - 1].raw_text = NULL;
+            manager->inputs[amount_inputs - 1].num_lines = 0;
+
             
             continue;
         }
