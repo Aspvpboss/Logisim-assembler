@@ -1,6 +1,7 @@
 #include "init.h"
 #include "tokenize.h"
 #include "quit.h"
+#include "alloc.h"
 
 int main(int argc, char **argv){
 

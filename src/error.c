@@ -34,6 +34,10 @@ void LogError(ErrorCode error, ErrorData *data){
                     printf("Command prompt error: no output type flag given\n");
                     break;
 
+                case(7):
+                    printf("Command prompt error: no input file given\n");
+                    break;
+
             }
 
             break;
@@ -65,8 +69,7 @@ void LogError(ErrorCode error, ErrorData *data){
     }
 
 
-    if(data->string != NULL){
-        free(data->string);
-    }
-
+   
+    s_free(data->string);
+    
 }

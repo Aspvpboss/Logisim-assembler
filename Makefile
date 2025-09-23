@@ -1,13 +1,13 @@
 GCC = gcc
 SRC = src/*.c
-INCLUDE = -Iinclude
+INCLUDE = -Iinclude -Iinclude/functions -Iinclude/structures
 FLAGS = -Wall -Werror -Wpedantic -g
 OUT = out.exe
 
 DEBUG = -ex "break main" -ex "run"
 
-#COMMAND_ARGS = a.asm b.asm -o c.txt -B
-COMMAND_ARGS = a.asm b.asm 
+COMMAND_ARGS = a.asm -o c.txt -B
+#COMMAND_ARGS = a.asm b.asm 
 
 
 default: build run

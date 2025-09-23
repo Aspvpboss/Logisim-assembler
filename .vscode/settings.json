@@ -8,6 +8,10 @@
         "future": "c",
         "system_error": "c",
         "regex": "c",
-        "chrono": "c"
+        "chrono": "c",
+        "stdlib.h": "c",
+        "ctype.h": "c",
+        "assembler_configs.h": "c",
+        "stdint.h": "c"
     }
 }
