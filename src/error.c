@@ -2,6 +2,7 @@
 #include "quit.h"
 #include <string.h>
 
+
 void LogError(ErrorCode error, ErrorData *data){
 
     switch(error){
@@ -69,7 +70,6 @@ void LogError(ErrorCode error, ErrorData *data){
     }
 
 
-   
-    s_free(data->string);
-    
+    s_free(data->string);    
 }
+

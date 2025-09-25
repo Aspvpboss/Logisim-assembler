@@ -99,9 +99,7 @@ enum Token_Type check_immediate_type(char *str, size_t str_len){
         }
 
     }
-
-
-
+    
     return TOKEN_NONE;
 }
 
@@ -165,6 +163,88 @@ enum Token_Type check_directives(char *str, size_t str_len){
     if(strcmp(str, ".glob") == 0)
         return TOKEN_GLOBAL_DIR;
 
+
+    return TOKEN_NONE;
+}
+
+
+enum Token_Type check_label_type(char *str, size_t str_len){
+
+    if(strcmp(str, ".byte") == 0)
+        return TOKEN_BYTE_ARRAY;
+
+    if(strcmp(str, ".ascii") == 0)
+        return TOKEN_ASCII_ARRAY;
+
+    if(strcmp(str, ".macro"))
+        return TOKEN_MACRO_START;
+    
+    if(strcmp(str, ".macroend"))
+        return TOKEN_MACRO_END;
+
+    return TOKEN_NONE;
+}
+
+enum Token_Type check_opcode(char *str, size_t str_len){
+
+    if(strcasecmp(str, "add") == 0)
+        return TOKEN_OP_ADD;
+    if(strcasecmp(str, "sub") == 0)
+        return TOKEN_OP_SUB;
+    if(strcasecmp(str, "cmp") == 0)
+        return TOKEN_OP_CMP;
+    if(strcasecmp(str, "ars") == 0)
+        return TOKEN_OP_ARS;
+    if(strcasecmp(str, "lrs") == 0)
+        return TOKEN_OP_LRS;
+    if(strcasecmp(str, "lls") == 0)
+        return TOKEN_OP_LLS;
+    if(strcasecmp(str, "mul") == 0)
+        return TOKEN_OP_MUL;
+    if(strcasecmp(str, "div") == 0)
+        return TOKEN_OP_DIV;
+    if(strcasecmp(str, "and") == 0)
+        return TOKEN_OP_AND;
+    if(strcasecmp(str, "or") == 0)
+        return TOKEN_OP_OR;
+    if(strcasecmp(str, "xor") == 0)
+        return TOKEN_OP_XOR;
+    if(strcasecmp(str, "not") == 0)
+        return TOKEN_OP_NOT;
+    if(strcasecmp(str, "nand") == 0)
+        return TOKEN_OP_NAND;
+    if(strcasecmp(str, "nor") == 0)
+        return TOKEN_OP_NOR;
+    if(strcasecmp(str, "xnor") == 0)
+        return TOKEN_OP_XNOR;
+
+    if(strcasecmp(str, "MOV") == 0)
+        return TOKEN_OP_MOV;
+    if(strcasecmp(str, "PUSH") == 0)
+        return TOKEN_OP_PUSH;
+    if(strcasecmp(str, "POP") == 0)
+        return TOKEN_OP_POP;
+    if(strcasecmp(str, "JMP") == 0)
+        return TOKEN_OP_JMP;
+    if(strcasecmp(str, "JIF") == 0)
+        return TOKEN_OP_JIF;
+    if(strcasecmp(str, "CAL") == 0)
+        return TOKEN_OP_CAL;
+    if(strcasecmp(str, "CIF") == 0)
+        return TOKEN_OP_CIF;
+    if(strcasecmp(str, "HLT") == 0)
+        return TOKEN_OP_HLT;
+
+
+    return TOKEN_NONE;
+}
+
+
+enum Token_Type check_comparison_operators(char *str, size_t str_len){
+
+    if(strcasecmp(str, ">"))
+        return TOKEN_COMP_ULS;
+
     return TOKEN_NONE;
 }
 
@@ -194,6 +274,15 @@ enum Token_Type lex_token(Token *token){
     result = check_directives(str, str_len);
     if(result)
         return result;
+
+    result = check_label_type(str, str_len);
+    if(result)
+        return result;
+
+    result = check_opcode(str, str_len);
+    if(result)
+        return result;
+
 
 
     return TOKEN_NONE;

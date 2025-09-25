@@ -37,7 +37,7 @@ int parse_command_args(Appstate *state, int argc, char *argv[], ErrorData *error
 
     File_Manager *manager = &state->manager;
     Assembler_Configs *configs = &state->configs;
-    int amount_inputs = 0;
+    manager->amount_inputs = 0;
     manager->output.path = NULL;
 
     if(argc <= 1){
@@ -85,13 +85,13 @@ int parse_command_args(Appstate *state, int argc, char *argv[], ErrorData *error
 
         if(validate_paths(argv[i], ".asm")){
 
-            amount_inputs++;
+            manager->amount_inputs++;
 
-            manager->inputs = s_realloc(manager->inputs, sizeof(File_Info) * amount_inputs);
-            manager->inputs[amount_inputs - 1].path = s_strdup(argv[i]);
-            manager->inputs[amount_inputs - 1].file = NULL;
-            manager->inputs[amount_inputs - 1].raw_text = NULL;
-            manager->inputs[amount_inputs - 1].num_lines = 0;
+            manager->inputs = s_realloc(manager->inputs, sizeof(File_Info) * manager->amount_inputs);
+            manager->inputs[manager->amount_inputs - 1].path = s_strdup(argv[i]);
+            manager->inputs[manager->amount_inputs - 1].file = NULL;
+            manager->inputs[manager->amount_inputs - 1].raw_text = NULL;
+            manager->inputs[manager->amount_inputs - 1].num_lines = 0;
 
             
             continue;
@@ -103,9 +103,9 @@ int parse_command_args(Appstate *state, int argc, char *argv[], ErrorData *error
 
     }
 
-    manager->amount_inputs = amount_inputs;
+ 
 
-    if(!amount_inputs){
+    if(!manager->amount_inputs){
         error->code = 7;
         return 1;
     }
