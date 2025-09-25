@@ -1,5 +1,6 @@
 #include "init.h"
 #include "tokenize.h"
+#include "lexical.h"
 #include "quit.h"
 #include "alloc.h"
 
@@ -15,6 +16,11 @@ int main(int argc, char **argv){
     if(tokenize(&state)){
         quit(&state);
         return 1;
+    }
+
+    if(lexical_analysis(&state)){
+        quit(&state);
+        return 1;        
     }
 
     quit(&state);

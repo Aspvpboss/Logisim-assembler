@@ -26,3 +26,10 @@ cif
 hlt
 
 r0 - r7
+
+0xff
+0xffff
+
+#  10
+#  0b01011111
+#  0x00ff

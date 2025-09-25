@@ -86,6 +86,7 @@ Token_Line* tokenize_line(const char *raw_line, const char *file_name, int origi
             tok_line->tk[amount_tokens - 1].text[0] = line[i];
             tok_line->tk[amount_tokens - 1].text[1] = '\0';
             line[i] = '\0';
+            tok_line->tk[amount_tokens - 1].text_len = strlen(tok_line->tk[amount_tokens - 1].text);
             previous_char = 0;
             continue;
 
@@ -111,6 +112,8 @@ Token_Line* tokenize_line(const char *raw_line, const char *file_name, int origi
             strncpy(tok_line->tk[amount_tokens - 1].text, &line[i], num_char);
             tok_line->tk[amount_tokens - 1].text[num_char] = '\0';
 
+            tok_line->tk[amount_tokens - 1].text_len = strlen(tok_line->tk[amount_tokens - 1].text);
+
             previous_char = 1;
             continue;
         }
@@ -123,12 +126,14 @@ Token_Line* tokenize_line(const char *raw_line, const char *file_name, int origi
     s_free(line);
 
     tok_line->amount_tokens = amount_tokens;
+
     if(amount_tokens == 0){
 
         free_tokenized_line(tok_line);
         s_free(tok_line);
         return NULL;
     }
+
 
     
 
@@ -147,7 +152,7 @@ Token_File* tokenize_file(File_Info *file, ErrorData *error){
 
     for(int i = 0; i < file->num_lines; i++){
 
-        tok_line = tokenize_line(file->raw_text[i], file->path, i + 1, error);
+        tok_line = tokenize_line(file->raw_text[i], file->path, i, error);
 
         if(tok_line == NULL){
             continue;
@@ -187,7 +192,7 @@ void print_tk_files(Token_File_Manager *tk_manager){
             for(int x = 0; x < tk_manager->tk_files[f]->tk_line[i]->amount_tokens; x++){
                 printf("%s ", tk_manager->tk_files[f]->tk_line[i]->tk[x].text);
             }
-            printf("\n");
+            printf("- line %d\n", tk_manager->tk_files[f]->tk_line[i]->original_line);
         }
 
     }
@@ -227,7 +232,7 @@ int tokenize(void *appstate){
     
 
 
-    print_tk_files(tk_manager);
+    //print_tk_files(tk_manager);
 
     return 0;
 }

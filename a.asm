@@ -1,4 +1,4 @@
-#include "function.asm"
+.include "function.asm"
 
 
 at 0x0000
