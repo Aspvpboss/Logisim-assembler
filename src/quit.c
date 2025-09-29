@@ -63,10 +63,11 @@ void free_tok_file_manager(Token_File_Manager *manager){
 
 void quit(Appstate *state){
 
-    //print_tracking_info();
-
     free_file_manager(&state->manager);
 
     free_tok_file_manager(&state->tk_manager);
+
+    if(check_memory_leak())
+        print_tracking_info();
 
 }

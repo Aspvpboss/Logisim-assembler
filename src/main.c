@@ -1,6 +1,3 @@
-#define TRACK_ALLOCATIONS
-
-#include "MemTrack.h"
 
 #include "init.h"
 #include "tokenize.h"
