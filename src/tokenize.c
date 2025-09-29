@@ -32,13 +32,13 @@ int check_special(const char c){
  
 Token_Line* tokenize_line(const char *raw_line, const char *file_name, int original_line, ErrorData *result){
 
-    Token_Line *tok_line = s_malloc(sizeof(Token_Line));
+    Token_Line *tok_line = t_malloc(sizeof(Token_Line));
     tok_line->amount_tokens = 0;
     tok_line->tk = NULL;
-    tok_line->path = s_strdup(file_name);
+    tok_line->path = t_strdup(file_name);
     tok_line->original_line = original_line;
 
-    char *line = s_strdup(raw_line);
+    char *line = t_strdup(raw_line);
     size_t line_len = strlen(raw_line);
 
     bool in_quotes = 0;
@@ -81,8 +81,8 @@ Token_Line* tokenize_line(const char *raw_line, const char *file_name, int origi
         if(check_special(line[i])){
 
             amount_tokens++;
-            tok_line->tk = s_realloc(tok_line->tk, sizeof(Token) * amount_tokens);
-            tok_line->tk[amount_tokens - 1].text = s_malloc(sizeof(char) * 2);
+            tok_line->tk = t_realloc(tok_line->tk, sizeof(Token) * amount_tokens);
+            tok_line->tk[amount_tokens - 1].text = t_malloc(sizeof(char) * 2);
             tok_line->tk[amount_tokens - 1].text[0] = line[i];
             tok_line->tk[amount_tokens - 1].text[1] = '\0';
             line[i] = '\0';
@@ -95,7 +95,7 @@ Token_Line* tokenize_line(const char *raw_line, const char *file_name, int origi
         if(line[i] != '\0' && !previous_char){
 
             amount_tokens++;
-            tok_line->tk = s_realloc(tok_line->tk, sizeof(Token) * amount_tokens);
+            tok_line->tk = t_realloc(tok_line->tk, sizeof(Token) * amount_tokens);
             
             int num_char = 0;
             tok_line->tk[amount_tokens - 1].text = NULL;
@@ -108,7 +108,7 @@ Token_Line* tokenize_line(const char *raw_line, const char *file_name, int origi
                 }
             }
 
-            tok_line->tk[amount_tokens - 1].text = s_malloc(sizeof(char) * (num_char + 1));
+            tok_line->tk[amount_tokens - 1].text = t_malloc(sizeof(char) * (num_char + 1));
             strncpy(tok_line->tk[amount_tokens - 1].text, &line[i], num_char);
             tok_line->tk[amount_tokens - 1].text[num_char] = '\0';
 
@@ -123,14 +123,14 @@ Token_Line* tokenize_line(const char *raw_line, const char *file_name, int origi
         }
     }
 
-    s_free(line);
+    t_free(line);
 
     tok_line->amount_tokens = amount_tokens;
 
     if(amount_tokens == 0){
 
         free_tokenized_line(tok_line);
-        s_free(tok_line);
+        t_free(tok_line);
         return NULL;
     }
 
@@ -143,8 +143,8 @@ Token_Line* tokenize_line(const char *raw_line, const char *file_name, int origi
 
 Token_File* tokenize_file(File_Info *file, ErrorData *error){
 
-    Token_File *tok_file = s_malloc(sizeof(Token_File));
-    tok_file->path = s_strdup(file->path);
+    Token_File *tok_file = t_malloc(sizeof(Token_File));
+    tok_file->path = t_strdup(file->path);
 
     Token_Line *tok_line = NULL;
     tok_file->tk_line = NULL;
@@ -159,7 +159,7 @@ Token_File* tokenize_file(File_Info *file, ErrorData *error){
         }
 
         amount_lines++;
-        tok_file->tk_line = s_realloc(tok_file->tk_line, sizeof(Token_Line*) * amount_lines);
+        tok_file->tk_line = t_realloc(tok_file->tk_line, sizeof(Token_Line*) * amount_lines);
         tok_file->tk_line[amount_lines - 1] = tok_line;
     }
 
@@ -169,7 +169,7 @@ Token_File* tokenize_file(File_Info *file, ErrorData *error){
         error->code = 3;
         
         free_tokenized_file(tok_file);
-        s_free(tok_file);
+        t_free(tok_file);
         return NULL;
     }
 
@@ -223,7 +223,7 @@ int tokenize(void *appstate){
         }
 
         amount_files++;
-        tk_manager->tk_files = s_realloc(tk_manager->tk_files, sizeof(Token_File*) * amount_files);
+        tk_manager->tk_files = t_realloc(tk_manager->tk_files, sizeof(Token_File*) * amount_files);
         tk_manager->tk_files[amount_files - 1] = tk_file;
 
     }

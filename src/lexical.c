@@ -295,13 +295,13 @@ enum Token_Type lex_token(Token *token){
 int lexical_analysis(Appstate *state){
     
     Token test;
-    test.text = s_strdup("0xff");
+    test.text = t_strdup("0xff");
 
     enum Token_Type result = lex_token(&test);
 
     print_TokenType(result);
 
-    s_free(test.text);
+    t_free(test.text);
 
     return 0;
 }

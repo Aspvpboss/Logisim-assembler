@@ -51,11 +51,11 @@ int parse_command_args(Appstate *state, int argc, char *argv[], ErrorData *error
 
             if(!validate_paths(argv[i + 1], ".txt")){
                 error->code = 2;
-                error->string = s_strdup(argv[i]);
+                error->string = t_strdup(argv[i]);
                 return 1;
             }
 
-            manager->output.path = s_strdup(argv[i + 1]);
+            manager->output.path = t_strdup(argv[i + 1]);
             manager->output.file = NULL;
             manager->output.num_lines = 0;
             i++;
@@ -66,7 +66,7 @@ int parse_command_args(Appstate *state, int argc, char *argv[], ErrorData *error
         if(strcmp(argv[i], "-B") == 0){
             if(configs->output_type != NO_OUTPUT){
                 error->code = 5;
-                error->string = s_strdup(argv[i]);
+                error->string = t_strdup(argv[i]);
                 return 1;
             }
             configs->output_type = BINARY_OUTPUT;
@@ -76,7 +76,7 @@ int parse_command_args(Appstate *state, int argc, char *argv[], ErrorData *error
         if(strcmp(argv[i], "-H") == 0){
             if(configs->output_type != NO_OUTPUT){
                 error->code = 5;
-                error->string = s_strdup(argv[i]);
+                error->string = t_strdup(argv[i]);
                 return 1;
             }
             configs->output_type = HEX_OUTPUT;
@@ -87,8 +87,8 @@ int parse_command_args(Appstate *state, int argc, char *argv[], ErrorData *error
 
             manager->amount_inputs++;
 
-            manager->inputs = s_realloc(manager->inputs, sizeof(File_Info) * manager->amount_inputs);
-            manager->inputs[manager->amount_inputs - 1].path = s_strdup(argv[i]);
+            manager->inputs = t_realloc(manager->inputs, sizeof(File_Info) * manager->amount_inputs);
+            manager->inputs[manager->amount_inputs - 1].path = t_strdup(argv[i]);
             manager->inputs[manager->amount_inputs - 1].file = NULL;
             manager->inputs[manager->amount_inputs - 1].raw_text = NULL;
             manager->inputs[manager->amount_inputs - 1].num_lines = 0;
@@ -98,7 +98,7 @@ int parse_command_args(Appstate *state, int argc, char *argv[], ErrorData *error
         }
 
         error->code = 1;
-        error->string = s_strdup(argv[i]);
+        error->string = t_strdup(argv[i]);
         return 1;
 
     }
@@ -159,7 +159,7 @@ int open_files(File_Manager *manager, ErrorData *error){
         inputs[i].file = fopen(inputs[i].path, "r");
         if(inputs[i].file == NULL){
             error->code = 2;
-            error->string = s_strdup(inputs[i].path);
+            error->string = t_strdup(inputs[i].path);
             return 1;            
         }
 
@@ -179,23 +179,23 @@ int read_files(File_Manager *manager, ErrorData *result){
 
         char file_name[255];
         manager->inputs[i].num_lines += 2;
-        manager->inputs[i].raw_text = s_malloc(sizeof(char*) * (manager->inputs[i].num_lines));
+        manager->inputs[i].raw_text = t_malloc(sizeof(char*) * (manager->inputs[i].num_lines));
 
 
         snprintf(file_name, sizeof(file_name), ".startfile %s", manager->inputs[i].path);
-        manager->inputs[i].raw_text[0] = s_strdup(file_name);
+        manager->inputs[i].raw_text[0] = t_strdup(file_name);
 
 
         for(int x = 1; x < manager->inputs[i].num_lines - 1; x++){
 
             fgets(file_line, sizeof(file_line), manager->inputs[i].file);
             file_line[strcspn(file_line, "\n")] = '\0';
-            manager->inputs[i].raw_text[x] = s_strdup(file_line);
+            manager->inputs[i].raw_text[x] = t_strdup(file_line);
 
         }
 
         snprintf(file_name, sizeof(file_name), ".endfile %s", manager->inputs[i].path);
-        manager->inputs[i].raw_text[manager->inputs[i].num_lines - 1] = s_strdup(file_name);
+        manager->inputs[i].raw_text[manager->inputs[i].num_lines - 1] = t_strdup(file_name);
     }
 
     return 0;

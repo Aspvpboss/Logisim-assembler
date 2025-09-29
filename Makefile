@@ -1,7 +1,9 @@
 GCC = gcc
 SRC = src/*.c
-INCLUDE = -Iinclude -Iinclude/functions -Iinclude/structures
-FLAGS = -Wall -Werror -Wpedantic -g
+INCLUDE = -Iinclude -Iinclude/functions -Iinclude/structures -IMemTrack/include
+LIBS = -LMemTrack/lib
+LINK = -lMemTrack
+ERROR = -Wall -Werror -Wpedantic -g
 OUT = out.exe
 
 DEBUG = -ex "break main" -ex "run"
@@ -16,7 +18,7 @@ d: build debug_run
 
 
 build:
-	@${GCC} ${FLAGS} -o ${OUT} ${SRC} ${INCLUDE}
+	${GCC} ${ERROR} -o ${OUT} ${SRC} ${INCLUDE} ${LIBS} ${LINK}
 
 run:
 	@${OUT} ${COMMAND_ARGS}

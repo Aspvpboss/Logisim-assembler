@@ -1,8 +1,11 @@
+#define TRACK_ALLOCATIONS
+
+#include "MemTrack.h"
+
 #include "init.h"
 #include "tokenize.h"
 #include "lexical.h"
 #include "quit.h"
-#include "alloc.h"
 
 int main(int argc, char **argv){
 

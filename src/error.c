@@ -70,6 +70,6 @@ void LogError(ErrorCode error, ErrorData *data){
     }
 
 
-    s_free(data->string);    
+    t_free(data->string);    
 }
 
