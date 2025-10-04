@@ -1,18 +1,25 @@
-.include "function.asm"
+
+at 0x00
+
+.macro MUL_3 reg_dest reg_src 
+
+    add reg_dest reg_src reg_src
+    add reg_dest reg_dest reg_src
+
+.macroend
 
 
-at 0x0000
 start:
 
     jmp main
 
+
 main:
 
-    Create_Array 0x00, #10, #10
-    cal Sum_Array
+    wre r0, io1
 
-    mov r3, 0xff00
+    MUL_3 r1, r0
+
+    snd r1 io1
 
     hlt
-
-    

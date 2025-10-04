@@ -37,13 +37,23 @@ void free_tokenized_line(Token_Line *tl){
 
 void free_tokenized_file(Token_File *tf){
 
-    for(int i = 0; i < tf->amount_lines; i++){
-        free_tokenized_line(tf->tk_line[i]);
-        t_free(tf->tk_line[i]);
+    Token_Line *current = tf->head;
+    Token_Line *next = NULL;
+
+    while(current){
+        
+        next = current->next;
+        free_tokenized_line(current);
+        t_free(current->path);
+        t_free(current);
+        current = next;
+
     }
-    t_free(tf->tk_line);
+
+    tf->head = NULL;
+    tf->tail = NULL;
+
     t_free(tf->path);
-    
 }
 
 void free_tok_file_manager(Token_File_Manager *manager){

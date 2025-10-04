@@ -89,19 +89,21 @@ typedef struct{
 
 } Token;
 
-typedef struct{
+typedef struct Token_Line{
 
     int amount_tokens;
     Token *tk;
     char *path;
     int original_line;
+    struct Token_Line *next;
 
 } Token_Line;
 
 
 typedef struct{
 
-    Token_Line **tk_line;
+    Token_Line *head;
+    Token_Line *tail;
     int amount_lines;
     char *path;
 

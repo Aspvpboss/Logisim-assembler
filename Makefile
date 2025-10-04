@@ -17,7 +17,7 @@ d: build debug_run
 
 
 build:
-	${GCC} -DTRACK_ALLOCATIONS ${ERROR} -o ${OUT} ${SRC} ${INCLUDE} ${LIBS} ${LINK}
+	@${GCC} -DTRACK_ALLOCATIONS ${ERROR} -o ${OUT} ${SRC} ${INCLUDE} ${LIBS} ${LINK}
 
 run:
 	@${OUT} ${COMMAND_ARGS}

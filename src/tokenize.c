@@ -143,40 +143,49 @@ Token_Line* tokenize_line(const char *raw_line, const char *file_name, int origi
 
 Token_File* tokenize_file(File_Info *file, ErrorData *error){
 
-    Token_File *tok_file = t_malloc(sizeof(Token_File));
-    tok_file->path = t_strdup(file->path);
+    Token_File *token_file = t_malloc(sizeof(Token_File));
+    token_file->path = t_strdup(file->path);
 
-    Token_Line *tok_line = NULL;
-    tok_file->tk_line = NULL;
+    Token_Line *token_line = NULL;
+    token_file->head = NULL;
     int amount_lines = 0;
 
     for(int i = 0; i < file->num_lines; i++){
 
-        tok_line = tokenize_line(file->raw_text[i], file->path, i, error);
+        token_line = tokenize_line(file->raw_text[i], file->path, i, error);
 
-        if(tok_line == NULL){
+        if(token_line == NULL){
             continue;
         }
 
+        if(token_file->head == NULL){
+
+            token_line->next = NULL;
+            token_file->head = token_line;
+            token_file->tail = token_line;
+
+        } else{
+
+            token_file->tail->next = token_line;
+            token_file->tail = token_line;
+            token_line->next = NULL;
+
+        }
+
         amount_lines++;
-        tok_file->tk_line = t_realloc(tok_file->tk_line, sizeof(Token_Line*) * amount_lines);
-        tok_file->tk_line[amount_lines - 1] = tok_line;
+
     }
 
-    tok_file->amount_lines = amount_lines;
+    token_file->amount_lines = amount_lines;
 
-    if(tok_file->amount_lines <= 2){
-        error->code = 3;
-        
-        free_tokenized_file(tok_file);
-        t_free(tok_file);
+    if(token_file->amount_lines <= 2){
+        error->code = 3;   
+        free_tokenized_file(token_file);
+        t_free(token_file);
         return NULL;
     }
 
-    
-
-
-    return tok_file;   
+    return token_file;   
 }
 
 
@@ -187,12 +196,16 @@ void print_tk_files(Token_File_Manager *tk_manager){
 
         printf("\n\n");
 
-        for(int i = 0; i < tk_manager->tk_files[f]->amount_lines; i++){
+        Token_Line *token_line = tk_manager->tk_files[f]->head;
 
-            for(int x = 0; x < tk_manager->tk_files[f]->tk_line[i]->amount_tokens; x++){
-                printf("%s ", tk_manager->tk_files[f]->tk_line[i]->tk[x].text);
+        while(token_line){
+
+            for(int x = 0; x < token_line->amount_tokens; x++){
+                printf("%s ", token_line->tk[x].text);
             }
-            printf("- line %d\n", tk_manager->tk_files[f]->tk_line[i]->original_line);
+            printf("- line %d\n", token_line->original_line);
+
+            token_line = token_line->next;
         }
 
     }
@@ -218,7 +231,7 @@ int tokenize(void *appstate){
         tk_file = tokenize_file(&manager->inputs[i], &result);
 
         if(tk_file == NULL){
-            LogError(FILE_ERROR, NULL);
+            LogError(FILE_ERROR, &result);
             return 1;
         }
 
@@ -232,7 +245,7 @@ int tokenize(void *appstate){
     
 
 
-    //print_tk_files(tk_manager);
+    print_tk_files(tk_manager);
 
     return 0;
 }

@@ -18,10 +18,10 @@ int main(int argc, char **argv){
         return 1;
     }
 
-    if(lexical_analysis(&state)){
-        quit(&state);
-        return 1;        
-    }
+    // if(lexical_analysis(&state)){
+    //     quit(&state);
+    //     return 1;        
+    // }
 
     quit(&state);
 
