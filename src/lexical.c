@@ -12,26 +12,11 @@ void print_TokenType(enum Token_Type type){
         case(TOKEN_NONE):
             printf("NONE\n");
             break;
-        case(TOKEN_EIGHT_BIN):
-            printf("EIGHT_BIN\n");
+        case(TOKEN_IMMEDIATE):
+            printf("immediate\n");
             break;
-        case(TOKEN_EIGHT_DEC):
-            printf("EIGHT_DEC\n");
-            break;
-        case(TOKEN_EIGHT_HEX):
-            printf("EIGHT_HEX\n");
-            break;
-        case(TOKEN_SIXTEEN_BIN):
-            printf("SIXTEEN_BIN\n");
-            break;
-        case(TOKEN_SIXTEEN_DEC):
-            printf("SIXTEEN_DEC\n");
-            break;
-        case(TOKEN_SIXTEEN_HEX):
-            printf("SIXTEEN_HEX\n");
-            break;
-        case(TOKEN_DIRECT_REG):
-            printf("DIRECT REGISTER\n");
+        case(TOKEN_REGISTER):
+            printf("REGISTER\n");
             break;
         default:
             printf("not an option\n");
@@ -70,33 +55,9 @@ enum Token_Type check_immediate_type(char *str, size_t str_len){
         return TOKEN_NONE;
     }
 
-    if(addr_value > -128 && addr_value < 256){
+    if(addr_value >= 0 && addr_value < 256){
 
-        switch(base){
-            case(2):
-                return TOKEN_EIGHT_BIN;
-            case(10):
-                return TOKEN_EIGHT_DEC;
-            case(16):
-                return TOKEN_EIGHT_HEX;
-            default:
-                break;
-        }
-
-    }
-
-    if(addr_value >= 0 && addr_value < 65536){
-
-        switch(base){
-            case(2):
-                return TOKEN_SIXTEEN_BIN;
-            case(10):
-                return TOKEN_SIXTEEN_DEC;
-            case(16):
-                return TOKEN_SIXTEEN_HEX;
-            default:
-                break;
-        }
+        return TOKEN_IMMEDIATE;
 
     }
     
@@ -109,7 +70,7 @@ int check_register(char *str, size_t str_len){
     if(str[0] == 'r' && str_len == 2){
         int reg_addr = str[1] - '0';
         if(reg_addr <= 7 && reg_addr >= 0){
-            return TOKEN_DIRECT_REG;
+            return TOKEN_REGISTER;
         }
     }
 
@@ -119,34 +80,20 @@ int check_register(char *str, size_t str_len){
 
 enum Token_Type check_special_type(char *str, size_t str_len){
 
-    if(str_len == 1){
-        switch(str[0]){
+    if(strcmp(str, ".macro"))
+        return TOKEN_MACRO_START;
+    
+    if(strcmp(str, ".macroend"))
+        return TOKEN_MACRO_END;
 
-            case('#'):
-                return TOKEN_IMMEDIATE;
-            case('"'):
-                return TOKEN_START_STRING;
-            case('['):
-                return TOKEN_START_ADDRESSING;
-            case(']'):
-                return TOKEN_END_ADDRESSING;
-            case('{'):
-                return TOKEN_START_ARRAY;
-            case('}'):
-                return TOKEN_END_ARRAY;
-            case(':'):
-                return TOKEN_LABEL_COLON;
-
-            default:
-                return TOKEN_NONE;
-        }
-    }
+    if(str_len == 1 && str[0] == ':')
+        return TOKEN_LABEL_COLON;
 
     return TOKEN_NONE;
 }
 
 
-enum Token_Type check_directives(char *str, size_t str_len){
+enum Token_Type check_directives(char *str){
 
     if(strcmp(str, ".include") == 0)
         return TOKEN_INCLUDE_DIR;
@@ -168,24 +115,7 @@ enum Token_Type check_directives(char *str, size_t str_len){
 }
 
 
-enum Token_Type check_label_type(char *str, size_t str_len){
-
-    if(strcmp(str, ".byte") == 0)
-        return TOKEN_BYTE_ARRAY;
-
-    if(strcmp(str, ".ascii") == 0)
-        return TOKEN_ASCII_ARRAY;
-
-    if(strcmp(str, ".macro"))
-        return TOKEN_MACRO_START;
-    
-    if(strcmp(str, ".macroend"))
-        return TOKEN_MACRO_END;
-
-    return TOKEN_NONE;
-}
-
-enum Token_Type check_opcode(char *str, size_t str_len){
+enum Token_Type check_opcode(char *str){
 
     if(strcasecmp(str, "add") == 0)
         return TOKEN_OP_ADD;
@@ -193,37 +123,16 @@ enum Token_Type check_opcode(char *str, size_t str_len){
         return TOKEN_OP_SUB;
     if(strcasecmp(str, "cmp") == 0)
         return TOKEN_OP_CMP;
-    if(strcasecmp(str, "ars") == 0)
-        return TOKEN_OP_ARS;
     if(strcasecmp(str, "lrs") == 0)
         return TOKEN_OP_LRS;
-    if(strcasecmp(str, "lls") == 0)
-        return TOKEN_OP_LLS;
-    if(strcasecmp(str, "mul") == 0)
-        return TOKEN_OP_MUL;
-    if(strcasecmp(str, "div") == 0)
-        return TOKEN_OP_DIV;
-    if(strcasecmp(str, "and") == 0)
-        return TOKEN_OP_AND;
     if(strcasecmp(str, "or") == 0)
         return TOKEN_OP_OR;
     if(strcasecmp(str, "xor") == 0)
         return TOKEN_OP_XOR;
-    if(strcasecmp(str, "not") == 0)
-        return TOKEN_OP_NOT;
     if(strcasecmp(str, "nand") == 0)
         return TOKEN_OP_NAND;
-    if(strcasecmp(str, "nor") == 0)
-        return TOKEN_OP_NOR;
-    if(strcasecmp(str, "xnor") == 0)
-        return TOKEN_OP_XNOR;
 
-    if(strcasecmp(str, "MOV") == 0)
-        return TOKEN_OP_MOV;
-    if(strcasecmp(str, "PUSH") == 0)
-        return TOKEN_OP_PUSH;
-    if(strcasecmp(str, "POP") == 0)
-        return TOKEN_OP_POP;
+
     if(strcasecmp(str, "JMP") == 0)
         return TOKEN_OP_JMP;
     if(strcasecmp(str, "JIF") == 0)
@@ -240,13 +149,11 @@ enum Token_Type check_opcode(char *str, size_t str_len){
 }
 
 
-enum Token_Type check_comparison_operators(char *str, size_t str_len){
+// enum Token_Type check_comparison_operators(char *str, size_t str_len){
 
-    if(strcasecmp(str, ">"))
-        return TOKEN_COMP_ULS;
 
-    return TOKEN_NONE;
-}
+//     return TOKEN_NONE;
+// }
 
 
 enum Token_Type lex_token(Token *token){
@@ -265,21 +172,17 @@ enum Token_Type lex_token(Token *token){
         return result;
 
     if(check_register(str, str_len))
-        return TOKEN_DIRECT_REG;
+        return TOKEN_REGISTER;
 
     result = check_special_type(str, str_len);
     if(result)
         return result;
 
-    result = check_directives(str, str_len);
+    result = check_directives(str);
     if(result)
         return result;
 
-    result = check_label_type(str, str_len);
-    if(result)
-        return result;
-
-    result = check_opcode(str, str_len);
+    result = check_opcode(str);
     if(result)
         return result;
 
@@ -293,9 +196,10 @@ enum Token_Type lex_token(Token *token){
 
 
 int lexical_analysis(Appstate *state){
-    
+    state->symbol_manager.amount_tables = 0;
     Token test;
     test.text = t_strdup("0xff");
+    test.text_len = strlen(test.text);
 
     enum Token_Type result = lex_token(&test);
 

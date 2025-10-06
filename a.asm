@@ -1,4 +1,3 @@
-
 at 0x00
 
 .macro MUL_3 reg_dest reg_src 
@@ -7,6 +6,7 @@ at 0x00
     add reg_dest reg_dest reg_src
 
 .macroend
+
 
 
 start:

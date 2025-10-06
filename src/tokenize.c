@@ -19,8 +19,6 @@ int check_special(const char c){
             return 1;
         case('}'):
             return 1;
-        case('#'):
-            return 1;
         case(':'):
             return 1;
 
@@ -30,7 +28,7 @@ int check_special(const char c){
 }
 
  
-Token_Line* tokenize_line(const char *raw_line, const char *file_name, int original_line, ErrorData *result){
+Token_Line* tokenize_line(const char *raw_line, const char *file_name, uint16_t original_line){
 
     Token_Line *tok_line = t_malloc(sizeof(Token_Line));
     tok_line->amount_tokens = 0;
@@ -44,7 +42,7 @@ Token_Line* tokenize_line(const char *raw_line, const char *file_name, int origi
     bool in_quotes = 0;
     bool comment = 0;
 
-    for(int i = 0; i <= line_len; i++){
+    for(size_t i = 0; i <= line_len; i++){
 
         if(comment){
             line[i] = '\0';
@@ -66,7 +64,7 @@ Token_Line* tokenize_line(const char *raw_line, const char *file_name, int origi
             continue;
 
 
-        if(isspace(line[i]) || line[i] == ','){
+        if(isspace(line[i]) || line[i] == ',' || line[i] == '#'){
             line[i] = '\0';
         }
     }
@@ -76,7 +74,7 @@ Token_Line* tokenize_line(const char *raw_line, const char *file_name, int origi
     bool previous_char = 0;
     int amount_tokens = 0;
 
-    for(int i = 0; i <= line_len; i++){
+    for(size_t i = 0; i <= line_len; i++){
 
         if(check_special(line[i])){
 
@@ -148,11 +146,11 @@ Token_File* tokenize_file(File_Info *file, ErrorData *error){
 
     Token_Line *token_line = NULL;
     token_file->head = NULL;
-    int amount_lines = 0;
+    uint16_t amount_lines = 0;
 
     for(int i = 0; i < file->num_lines; i++){
 
-        token_line = tokenize_line(file->raw_text[i], file->path, i, error);
+        token_line = tokenize_line(file->raw_text[i], file->path, i);
 
         if(token_line == NULL){
             continue;
@@ -223,7 +221,7 @@ int tokenize(void *appstate){
 
     tk_manager->tk_files = NULL;    
     Token_File *tk_file = NULL;
-    int amount_files = 0;
+    uint16_t amount_files = 0;
 
     
     for(int i = 0; i < manager->amount_inputs; i++){

@@ -23,7 +23,7 @@ typedef struct{
 typedef struct{
 
     Symbol **symbols;
-    int amount_symbols;
+    uint16_t amount_symbols;
     char *file;
 
 } Symbol_Table;
@@ -32,7 +32,7 @@ typedef struct{
 typedef struct{
 
     Symbol_Table **tables;
-    int amount_tables;
+    uint16_t amount_tables;
 
 } Symbol_Table_Manager;
 

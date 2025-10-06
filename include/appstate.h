@@ -1,6 +1,7 @@
 #pragma once
 
 #include <MemTrack.h>
+#include <stdint.h>
 #include "file_manager.h"
 #include "tokenize_data.h"
 #include "assembler_configs.h"

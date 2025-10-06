@@ -126,10 +126,10 @@ int parse_command_args(Appstate *state, int argc, char *argv[], ErrorData *error
 
 
 
-int get_lines_file(FILE *file){
+uint16_t get_lines_file(FILE *file){
 
     char file_line[500];
-    int num_lines = 0;
+    uint16_t num_lines = 0;
     while(fgets(file_line, sizeof(file_line), file)){
         num_lines++;    
     }
@@ -171,7 +171,7 @@ int open_files(File_Manager *manager, ErrorData *error){
 
 
 
-int read_files(File_Manager *manager, ErrorData *result){
+int read_files(File_Manager *manager){
 
     char file_line[255];
 
@@ -224,8 +224,8 @@ int initialize(Appstate *state, int argc, char **argv){
     }
     
 
-    if(read_files(&state->manager, &result)){
-        LogError(FILE_ERROR, &result);
+    if(read_files(&state->manager)){
+        //LogError(FILE_ERROR, &result);
         return 1;        
     }
 
