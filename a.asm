@@ -22,4 +22,4 @@ main:
 
     snd r1 io1
 
-    hlt
+    "string" label:

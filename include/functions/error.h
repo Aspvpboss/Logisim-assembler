@@ -6,14 +6,16 @@ typedef enum{
 
     NO_ERROR,
     ASSEMBLE_ARGS_ERROR,
-    FILE_ERROR
+    FILE_ERROR,
+    LEXICAL_ERROR
 
 } ErrorCode;
 
 
 typedef struct{
 
-    int code;
+    uint8_t code;
+    uint32_t data;
     char *string;
 
 } ErrorData;

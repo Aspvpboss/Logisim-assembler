@@ -63,6 +63,23 @@ void LogError(ErrorCode error, ErrorData *data){
 
             break;
 
+        case(LEXICAL_ERROR):
+
+            switch(data->code){
+
+
+                case(1):
+                    printf("Lexical error: failed to end a '.macrostart'");
+                    break;
+                case(2):
+                    printf("");
+                    break;
+                
+
+            }
+
+            break;
+
         default:
 
             break;
