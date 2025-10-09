@@ -1,4 +1,4 @@
-cmp
+inc
 add
 sub
 lrs
@@ -38,11 +38,9 @@ r0 - r7
 0xff
 
 label:
-.ascii
-.byte
+
 
 .glob
-
 .inline_macro
 .macrostart
 .macroend

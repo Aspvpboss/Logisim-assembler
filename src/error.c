@@ -5,6 +5,8 @@
 
 void LogError(ErrorCode error, ErrorData *data){
 
+    puts("\n");
+
     switch(error){
 
         case(ASSEMBLE_ARGS_ERROR):
@@ -69,10 +71,6 @@ void LogError(ErrorCode error, ErrorData *data){
 
 
                 case(1):
-                    printf("Lexical error: failed to end a '.macrostart'");
-                    break;
-                case(2):
-                    printf("");
                     break;
                 
 
@@ -86,6 +84,7 @@ void LogError(ErrorCode error, ErrorData *data){
 
     }
 
+    puts("\n");
 
     t_free(data->string);    
 }

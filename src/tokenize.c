@@ -15,10 +15,6 @@ int check_special(const char c){
             return 1;
         case(']'):
             return 1;
-        case('{'):
-            return 1;
-        case('}'):
-            return 1;
         case(':'):
             return 1;
 
@@ -55,11 +51,20 @@ Token_Line* tokenize_line(const char *raw_line, const char *file_name, uint16_t 
             continue;
         }
 
+        if(strncmp(line + i, "//", 2) == 0){
+            line[i] = '\0';
+            line[i + 1] = '\0';
+            comment = 1;
+            i++;
+            continue;            
+        }
+
 
         if(line[i] == '"'){
             in_quotes = !in_quotes;
             continue;
         }
+
         if(in_quotes)
             continue;
 
@@ -243,7 +248,7 @@ int tokenize(void *appstate){
     
 
 
-    print_tk_files(tk_manager);
+    //print_tk_files(tk_manager);
 
     return 0;
 }

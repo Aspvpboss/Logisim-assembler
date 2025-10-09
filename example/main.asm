@@ -16,11 +16,20 @@ start:
 
 main:
 
-    wre r0, io1
+    wre r0 io1
 
-    MUL_3 r1, r0
+    MUL_3 r1 r0
 
     snd r1 io1
 
+
+
+    add * r0 r1 $
+
+
+
     hlt
+
+
+
 

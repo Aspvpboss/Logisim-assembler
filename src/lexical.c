@@ -8,22 +8,79 @@
 #include <stdlib.h>
 
 
-void print_TokenType(enum Token_Type type){
-    switch(type){
+const char* token_type_to_string(enum Token_Type type) {
 
-        case(TOKEN_NONE):
-            printf("NONE\n");
-            break;
-        case(TOKEN_IMMEDIATE):
-            printf("immediate\n");
-            break;
-        case(TOKEN_REGISTER):
-            printf("REGISTER\n");
-            break;
-        default:
-            printf("not an option\n");
-            break;
+    switch (type) {
+        case TOKEN_NONE: return "TOKEN_NONE";
+
+        case TOKEN_OP_ADD: return "TOKEN_OP_ADD";
+        case TOKEN_OP_SUB: return "TOKEN_OP_SUB";
+        case TOKEN_OP_CMP: return "TOKEN_OP_CMP";
+        case TOKEN_OP_LRS: return "TOKEN_OP_LRS";
+        case TOKEN_OP_OR: return "TOKEN_OP_OR";
+        case TOKEN_OP_XOR: return "TOKEN_OP_XOR";
+        case TOKEN_OP_NAND: return "TOKEN_OP_NAND";
+
+        case TOKEN_OP_JMP: return "TOKEN_OP_JMP";
+        case TOKEN_OP_JIF: return "TOKEN_OP_JIF";
+        case TOKEN_OP_CAL: return "TOKEN_OP_CAL";
+        case TOKEN_OP_CIF: return "TOKEN_OP_CIF";
+        case TOKEN_OP_HLT: return "TOKEN_OP_HLT";
+        case TOKEN_OP_RET: return "TOKEN_OP_RET";
+
+        case TOKEN_OP_LDI: return "TOKEN_OP_LDI";
+        case TOKEN_OP_RTR: return "TOKEN_OP_RTR";
+        case TOKEN_OP_RPC: return "TOKEN_OP_RPC";
+        case TOKEN_OP_PCR: return "TOKEN_OP_PCR";
+        case TOKEN_OP_STR: return "TOKEN_OP_STR";
+        case TOKEN_OP_LOD: return "TOKEN_OP_LOD";
+        case TOKEN_OP_STR_INDIRECT: return "TOKEN_OP_STR_INDIRECT";
+        case TOKEN_OP_LOD_INDIRECT: return "TOKEN_OP_LOD_INDIRECT";
+
+        case TOKEN_OP_SND: return "TOKEN_OP_SND";
+        case TOKEN_OP_SDI: return "TOKEN_OP_SDI";
+        case TOKEN_OP_WRE: return "TOKEN_OP_WRE";
+        case TOKEN_OP_REC: return "TOKEN_OP_REC";
+
+        case TOKEN_COMP_CARRY: return "TOKEN_COMP_CARRY";
+        case TOKEN_COMP_ZERO: return "TOKEN_COMP_ZERO";
+        case TOKEN_COMP_NOT_ZERO: return "TOKEN_COMP_NOT_ZERO";
+        case TOKEN_COMP_GREATER: return "TOKEN_COMP_GREATER";
+        case TOKEN_COMP_LESS: return "TOKEN_COMP_LESS";
+        case TOKEN_COMP_GREATER_EQ: return "TOKEN_COMP_GREATER_EQ";
+        case TOKEN_COMP_LESS_EQ: return "TOKEN_COMP_LESS_EQ";
+        case TOKEN_COMP_ODD: return "TOKEN_COMP_ODD";
+
+        case TOKEN_REGISTER: return "TOKEN_REGISTER";
+        case TOKEN_REG_POINTER: return "TOKEN_REG_POINTER";
+
+        case TOKEN_LABEL: return "TOKEN_LABEL";
+        case TOKEN_LABEL_COLON: return "TOKEN_LABEL_COLON";
+
+        case TOKEN_STRING_START: return "TOKEN_STRING_START";
+        case TOKEN_STRING: return "TOKEN_STRING";
+        case TOKEN_STRING_END: return "TOKEN_STRING_END";
+
+        case TOKEN_MACRO_START: return "TOKEN_MACRO_START";
+        case TOKEN_MACRO_MUL: return "TOKEN_MACRO_MUL";
+        case TOKEN_MACRO_ARGS: return "TOKEN_MACRO_ARGS";
+        case TOKEN_MACRO_END: return "TOKEN_MACRO_END";
+
+        case TOKEN_MACRO_INLINE: return "TOKEN_MACRO_INLINE";
+        case TOKEN_MACRO_SINGLE: return "TOKEN_MACRO_SINGLE";
+
+        case TOKEN_IMMEDIATE: return "TOKEN_IMMEDIATE";
+
+        case TOKEN_AT_DIR: return "TOKEN_AT_DIR";
+        case TOKEN_GLOBAL_DIR: return "TOKEN_GLOBAL_DIR";
+        case TOKEN_INCLUDE_DIR: return "TOKEN_INCLUDE_DIR";
+        case TOKEN_START_FILE_DIR: return "TOKEN_START_FILE_DIR";
+        case TOKEN_END_FILE_DIR: return "TOKEN_END_FILE_DIR";
+
+        default: return "TOKEN_UNKNOWN";
     }
+
+    return NULL;
 }
 
 
@@ -67,29 +124,33 @@ enum Token_Type check_immediate_type(char *str, size_t str_len){
 }
 
 
-int check_register(char *str, size_t str_len){
+enum Token_Type check_register(char *str, size_t str_len){
 
-    if(str_len != 2 || str[0] != 'r')
-        return 0;
-
-    if(str[0] == 'r' && str_len == 2){
+    if(str_len == 4 && str[0] == '[' && str[1] == 'r' && str[3] == ']'){
         int reg_addr = str[1] - '0';
         if(reg_addr <= 7 && reg_addr >= 0){
-            return 1;
+            return TOKEN_REG_POINTER;
         }
     }
 
-    return 0;
+    if(str_len == 2 && str[0] == 'r'){
+        int reg_addr = str[1] - '0';
+        if(reg_addr <= 7 && reg_addr >= 0){
+            return TOKEN_REGISTER;
+        }
+    }
+
+    return TOKEN_NONE;
 }
 
 
 enum Token_Type check_special_type(char *str, size_t str_len){
 
-    if(strcmp(str, ".macro"))
+    if(strcmp(str, ".macro") == 0)
         return TOKEN_MACRO_START;
-    if(strcmp(str, ".macroend"))
+    if(strcmp(str, ".macroend") == 0)
         return TOKEN_MACRO_END;
-    if(strcmp(str, ".inline_macro"))
+    if(strcmp(str, ".inline_macro") == 0)
         return TOKEN_MACRO_INLINE;
 
     if(str_len == 1 && str[0] == ':')
@@ -198,8 +259,9 @@ enum Token_Type lex_token(Token *token){
     if(result)
         return result;
 
-    if(check_register(str, str_len))
-        return TOKEN_REGISTER;
+    result = (check_register(str, str_len));
+    if(result)
+        return result;
 
     result = check_special_type(str, str_len);
     if(result)
@@ -237,11 +299,18 @@ int lex_token_line(Token_Line *token_line, ErrorData *error){
         current_token = &token_line->tk[i];
         current_token->type = lex_token(current_token);
 
+
+
+        if(string_opened && current_token->type == TOKEN_STRING_START){
+            string_opened = 0;
+            current_token->type = TOKEN_STRING_END;
+        }
+
         if(!string_opened && current_token->type == TOKEN_STRING_START)
             string_opened = 1;
 
-        if(string_opened && current_token->type == TOKEN_STRING_END)
-            string_opened = 0;
+        
+            
 
 
         if(!previous_token || i == 0){
@@ -264,14 +333,10 @@ int lex_token_line(Token_Line *token_line, ErrorData *error){
 
                 break;
 
-            case(TOKEN_STRING_END):
-
-                if(!previous_token->type)
-                    previous_token->type = TOKEN_STRING;
-
-                break;
-
             case(TOKEN_NONE):
+
+                if(previous_token->type == TOKEN_STRING_START)
+                    current_token->type = TOKEN_STRING;
 
                 if(previous_token->type == TOKEN_MACRO_START)
                     previous_token->type = TOKEN_MACRO_MUL;
@@ -279,6 +344,11 @@ int lex_token_line(Token_Line *token_line, ErrorData *error){
 
                 if(previous_token->type == TOKEN_MACRO_INLINE)
                     current_token->type = TOKEN_MACRO_SINGLE;
+                
+                if(macro_opened && current_token->type == TOKEN_NONE){
+                    current_token->type = TOKEN_MACRO_ARGS;
+                    macro_args++;
+                }
 
                 break;
 
@@ -287,16 +357,10 @@ int lex_token_line(Token_Line *token_line, ErrorData *error){
                 break;
         }
 
-
-        if(string_opened){
-            error->string = t_strdup(token_line->path);
-            error->data = token_line->original_line;
-            return 1;
-        }
-
-
         previous_token = current_token;
     }
+    
+
 
     return 0;
 }
@@ -311,15 +375,22 @@ int lexical_analysis(Appstate *state){
     error.code = 0;
     error.string = NULL;
 
-    Token_Line *token_line = state->tk_manager.tk_files[0]->tail;
+    Token_Line *current = state->tk_manager.tk_files[0]->head;
 
-    if(lex_token_line(token_line, &error)){
-        LogError(LEXICAL_ERROR, &error);
-        return 1;
+
+    while(current){
+
+        lex_token_line(current, &error);
+
+        for(int i = 0; i < current->amount_tokens; i++){
+            printf("%s - %s\n", current->tk[i].text, token_type_to_string(current->tk[i].type));
+        }
+
+        current = current->next;
+        printf("\n");
     }
 
 
-
-
+    
     return 0;
 }

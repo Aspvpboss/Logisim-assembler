@@ -182,7 +182,7 @@ int read_files(File_Manager *manager){
         manager->inputs[i].raw_text = t_malloc(sizeof(char*) * (manager->inputs[i].num_lines));
 
 
-        snprintf(file_name, sizeof(file_name), ".startfile %s", manager->inputs[i].path);
+        snprintf(file_name, sizeof(file_name), ".startfile \"%s\"", manager->inputs[i].path);
         manager->inputs[i].raw_text[0] = t_strdup(file_name);
 
 
@@ -194,7 +194,7 @@ int read_files(File_Manager *manager){
 
         }
 
-        snprintf(file_name, sizeof(file_name), ".endfile %s", manager->inputs[i].path);
+        snprintf(file_name, sizeof(file_name), ".endfile \"%s\"", manager->inputs[i].path);
         manager->inputs[i].raw_text[manager->inputs[i].num_lines - 1] = t_strdup(file_name);
     }
 
