@@ -1,12 +1,10 @@
 #pragma once
-
+#include <stdbool.h>
 
 typedef enum{
 
     SYMBOL_LABEL,
     SYMBOL_MACRO,
-    SYMBOL_EXPORT_LABEL,
-    SYMBOL_EXPORT_MACRO
 
 } Symbol_Type;
 
@@ -15,6 +13,7 @@ typedef struct{
 
     void *data;
     char *text;
+    bool export;
     Symbol_Type type;
 
 } Symbol;

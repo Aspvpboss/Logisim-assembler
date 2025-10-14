@@ -102,6 +102,7 @@ Token_Line* tokenize_line(const char *raw_line, const char *file_name, uint16_t 
             
             int num_char = 0;
             tok_line->tk[amount_tokens - 1].text = NULL;
+            tok_line->tk[amount_tokens - 1].type = TOKEN_NONE;
 
             for(int x = i; line[x] != '\0'; x++){
 

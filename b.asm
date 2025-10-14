@@ -1,51 +1,46 @@
+inc
+add
+sub
+lrs
 
-.glob Sum_Array
-.glob Create_Array
+nand
+or
+xor
 
-at 0x0f00
+ldi
+rtr
+lod
+str 
+rpc
+pcr
 
-.macro Create_Array immediate_pointer, value, length
-    mov r0, #0
+snd
+sdi
+rec 
+wre 
 
-    loop_macro:
+jmp
+jif
+cal
+cif
+hlt
 
-        mov [immediate_pointer, r0], value
-        cmp value, length
-        jif >= macro_ret
-        add r0, r0, #1
-        jmp
+r0 r7
 
-    macro_ret:
+0xff
 
-        mov r0, immediate_pointer 
-        mov r1, length
-        ret
+#10
+#0b01011111
+#0x00ff
+
+10 
+0b0101
+0xff
+
+label:
+
+
+.glob
+.inline_macro Inline_Macro_Name stuffstuffstuff
+.macrostart Macro_Name vorp vorp
 .macroend
-
-Sum_Array:
-
-    ; r0 pointer to array 
-    ; r1 length of array  
-    ; r3 will contain sum
-
-    mov r2, #0
-    mov r3, #0
-    mov r4, #0
-
-    for_loop:
-
-        mov r4, [r0, r2]
-        add r3, r3, r4
-        add r2, r2, #1
-        cmp r2, r1
-        jif >= function_ret
-
-        add r2, r2, #1
-
-        jmp for_loop
-
-    function_ret:
-        ret
-
-
-

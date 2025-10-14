@@ -10,12 +10,13 @@
 
 const char* token_type_to_string(enum Token_Type type) {
 
-    switch (type) {
+    switch(type){
+
         case TOKEN_NONE: return "TOKEN_NONE";
 
         case TOKEN_OP_ADD: return "TOKEN_OP_ADD";
         case TOKEN_OP_SUB: return "TOKEN_OP_SUB";
-        case TOKEN_OP_CMP: return "TOKEN_OP_CMP";
+        case TOKEN_OP_INC: return "TOKEN_OP_INC";
         case TOKEN_OP_LRS: return "TOKEN_OP_LRS";
         case TOKEN_OP_OR: return "TOKEN_OP_OR";
         case TOKEN_OP_XOR: return "TOKEN_OP_XOR";
@@ -61,6 +62,9 @@ const char* token_type_to_string(enum Token_Type type) {
         case TOKEN_STRING: return "TOKEN_STRING";
         case TOKEN_STRING_END: return "TOKEN_STRING_END";
 
+        case TOKEN_START_BRACKET: return "TOKEN_START_BRACKET";
+        case TOKEN_END_BRACKET: return "TOKEN_END_BRACKET";
+
         case TOKEN_MACRO_START: return "TOKEN_MACRO_START";
         case TOKEN_MACRO_MUL: return "TOKEN_MACRO_MUL";
         case TOKEN_MACRO_ARGS: return "TOKEN_MACRO_ARGS";
@@ -81,6 +85,27 @@ const char* token_type_to_string(enum Token_Type type) {
     }
 
     return NULL;
+}
+
+
+void print_file_lex(Token_File_Manager *manager){
+
+    for(int i = 0; i < manager->amount_files; i++){
+
+        Token_Line *current = manager->tk_files[i]->head;
+
+        while(current){
+
+            for(int i = 0; i < current->amount_tokens; i++){
+                printf("%s - %s\n", current->tk[i].text, token_type_to_string(current->tk[i].type));
+            }
+
+            current = current->next;
+            printf("\n");
+        }
+
+    }
+
 }
 
 
@@ -111,7 +136,9 @@ enum Token_Type check_immediate_type(char *str, size_t str_len){
     addr_value = strtol(str + offset, &endptr, base);
 
     if(str + offset == endptr || *endptr != '\0'){
+
         return TOKEN_NONE;
+
     }
 
     if(addr_value >= 0 && addr_value < 256){
@@ -144,19 +171,41 @@ enum Token_Type check_register(char *str, size_t str_len){
 }
 
 
+enum Token_Type check_io(char *str, size_t str_len){
+
+    if(str_len == 3 && (strncmp(str, "io", 2) == 0)){
+
+        int reg_addr = str[2] - '0';
+        if(reg_addr <= 7 && reg_addr >= 0){
+            return TOKEN_IO;
+        }
+    }
+
+    return TOKEN_NONE;
+}
+
+
 enum Token_Type check_special_type(char *str, size_t str_len){
 
-    if(strcmp(str, ".macro") == 0)
+    if(strcmp(str, ".macrostart") == 0)
         return TOKEN_MACRO_START;
     if(strcmp(str, ".macroend") == 0)
         return TOKEN_MACRO_END;
     if(strcmp(str, ".inline_macro") == 0)
         return TOKEN_MACRO_INLINE;
 
-    if(str_len == 1 && str[0] == ':')
-        return TOKEN_LABEL_COLON;
-    if(str_len == 1 && str[0] == '"')
-        return TOKEN_STRING_START;
+    switch(str[0]){
+
+        case(':'):
+            return TOKEN_LABEL_COLON;
+        case('"'):
+            return TOKEN_STRING_START;
+        case('['):
+            return TOKEN_START_BRACKET;
+        case(']'):
+            return TOKEN_END_BRACKET;
+
+    }
 
     return TOKEN_NONE;
 }
@@ -186,35 +235,35 @@ enum Token_Type check_directives(char *str){
 
 enum Token_Type check_opcode(char *str){
 
-    if(strcasecmp(str, "add") == 0)
-        return TOKEN_OP_ADD;
-    if(strcasecmp(str, "sub") == 0)
-        return TOKEN_OP_SUB;
-    if(strcasecmp(str, "cmp") == 0)
-        return TOKEN_OP_CMP;
-    if(strcasecmp(str, "lrs") == 0)
-        return TOKEN_OP_LRS;
-    if(strcasecmp(str, "or") == 0)
-        return TOKEN_OP_OR;
-    if(strcasecmp(str, "xor") == 0)
-        return TOKEN_OP_XOR;
-    if(strcasecmp(str, "nand") == 0)
-        return TOKEN_OP_NAND;
+    if (strcasecmp(str, "add") == 0) return TOKEN_OP_ADD;
+    if (strcasecmp(str, "sub") == 0) return TOKEN_OP_SUB;
+    if (strcasecmp(str, "inc") == 0) return TOKEN_OP_INC;
+    if (strcasecmp(str, "lrs") == 0) return TOKEN_OP_LRS;
+    if (strcasecmp(str, "or")  == 0) return TOKEN_OP_OR;
+    if (strcasecmp(str, "xor") == 0) return TOKEN_OP_XOR;
+    if (strcasecmp(str, "nand") == 0) return TOKEN_OP_NAND;
 
+    if (strcasecmp(str, "ldi") == 0) return TOKEN_OP_LDI;
+    if (strcasecmp(str, "rtr") == 0) return TOKEN_OP_RTR;
+    if (strcasecmp(str, "rpc") == 0) return TOKEN_OP_RPC;
+    if (strcasecmp(str, "pcr") == 0) return TOKEN_OP_PCR;
+    if (strcasecmp(str, "str") == 0) return TOKEN_OP_STR;
+    if (strcasecmp(str, "lod") == 0) return TOKEN_OP_LOD;
 
-    if(strcasecmp(str, "JMP") == 0)
-        return TOKEN_OP_JMP;
-    if(strcasecmp(str, "JIF") == 0)
-        return TOKEN_OP_JIF;
-    if(strcasecmp(str, "CAL") == 0)
-        return TOKEN_OP_CAL;
-    if(strcasecmp(str, "CIF") == 0)
-        return TOKEN_OP_CIF;
-    if(strcasecmp(str, "HLT") == 0)
-        return TOKEN_OP_HLT;
+    if (strcasecmp(str, "jmp") == 0) return TOKEN_OP_JMP;
+    if (strcasecmp(str, "jif") == 0) return TOKEN_OP_JIF;
+    if (strcasecmp(str, "cal") == 0) return TOKEN_OP_CAL;
+    if (strcasecmp(str, "cif") == 0) return TOKEN_OP_CIF;
+    if (strcasecmp(str, "ret") == 0) return TOKEN_OP_RET;
+    if (strcasecmp(str, "hlt") == 0) return TOKEN_OP_HLT;
 
+    if (strcasecmp(str, "snd") == 0) return TOKEN_OP_SND;
+    if (strcasecmp(str, "sdi") == 0) return TOKEN_OP_SDI;
+    if (strcasecmp(str, "rec") == 0) return TOKEN_OP_REC;
+    if (strcasecmp(str, "wre") == 0) return TOKEN_OP_WRE;
 
     return TOKEN_NONE;
+
 }
 
 
@@ -259,7 +308,11 @@ enum Token_Type lex_token(Token *token){
     if(result)
         return result;
 
-    result = (check_register(str, str_len));
+    result = check_register(str, str_len);
+    if(result)
+        return result;
+
+    result = check_io(str, str_len);
     if(result)
         return result;
 
@@ -285,14 +338,14 @@ enum Token_Type lex_token(Token *token){
 }
 
 
-int lex_token_line(Token_Line *token_line, ErrorData *error){
+int lex_token_line(Token_Line *token_line){
 
     Token *current_token = NULL;
     Token *previous_token = NULL;
 
     bool string_opened = 0;
-    bool macro_opened = 0;
-    uint16_t macro_args = 0;
+    bool mul_macro_opened = 0;
+    bool single_macro_opened = 0;
 
     for(uint8_t i = 0; i < token_line->amount_tokens; i++){
 
@@ -322,8 +375,12 @@ int lex_token_line(Token_Line *token_line, ErrorData *error){
 
             case(TOKEN_MACRO_START):
 
-                macro_opened = 1;
+                mul_macro_opened = 1;
+                break;
 
+            case(TOKEN_MACRO_INLINE):
+
+                single_macro_opened = 1;
                 break;
 
             case(TOKEN_LABEL_COLON):
@@ -335,19 +392,17 @@ int lex_token_line(Token_Line *token_line, ErrorData *error){
 
             case(TOKEN_NONE):
 
-                if(previous_token->type == TOKEN_STRING_START)
+                if (previous_token->type == TOKEN_STRING_START) {
                     current_token->type = TOKEN_STRING;
-
-                if(previous_token->type == TOKEN_MACRO_START)
-                    previous_token->type = TOKEN_MACRO_MUL;
-
-
-                if(previous_token->type == TOKEN_MACRO_INLINE)
+                }
+                else if (previous_token->type == TOKEN_MACRO_START) {
+                    current_token->type = TOKEN_MACRO_MUL;
+                }
+                else if (previous_token->type == TOKEN_MACRO_INLINE) {
                     current_token->type = TOKEN_MACRO_SINGLE;
-                
-                if(macro_opened && current_token->type == TOKEN_NONE){
+                }
+                else if (mul_macro_opened || single_macro_opened) {
                     current_token->type = TOKEN_MACRO_ARGS;
-                    macro_args++;
                 }
 
                 break;
@@ -365,32 +420,36 @@ int lex_token_line(Token_Line *token_line, ErrorData *error){
     return 0;
 }
 
+int lex_file(Token_File *file){
+
+    Token_Line *current = file->head;
+
+    while(current){
+
+        lex_token_line(current);
+        current = current->next;
+        printf("\n");
+
+    }    
+
+
+    return 0;
+}
+
 
 
 
 
 int lexical_analysis(Appstate *state){
 
-    ErrorData error;
-    error.code = 0;
-    error.string = NULL;
 
-    Token_Line *current = state->tk_manager.tk_files[0]->head;
-
-
-    while(current){
-
-        lex_token_line(current, &error);
-
-        for(int i = 0; i < current->amount_tokens; i++){
-            printf("%s - %s\n", current->tk[i].text, token_type_to_string(current->tk[i].type));
-        }
-
-        current = current->next;
-        printf("\n");
-    }
-
+    for(int i = 0; i < state->tk_manager.amount_files; i++){
+        lex_file(state->tk_manager.tk_files[i]);
+    }    
 
     
+    print_file_lex(&state->tk_manager);
+
+
     return 0;
 }

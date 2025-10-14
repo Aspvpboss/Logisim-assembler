@@ -8,7 +8,6 @@
 #include "symbol_table.h"
 
 
-
 typedef struct{
 
     File_Manager manager;

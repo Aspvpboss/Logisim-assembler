@@ -25,7 +25,7 @@ cal
 cif
 hlt
 
-r0 - r7
+r0 r7
 
 0xff
 

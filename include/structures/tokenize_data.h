@@ -8,7 +8,7 @@ enum Token_Type{
 
     TOKEN_OP_ADD,
     TOKEN_OP_SUB,
-    TOKEN_OP_CMP,
+    TOKEN_OP_INC,
     TOKEN_OP_LRS,
     TOKEN_OP_OR,
     TOKEN_OP_XOR,
@@ -29,11 +29,16 @@ enum Token_Type{
     TOKEN_OP_LOD,
     TOKEN_OP_STR_INDIRECT,
     TOKEN_OP_LOD_INDIRECT,
-
     TOKEN_OP_SND,
     TOKEN_OP_SDI,
     TOKEN_OP_WRE,
     TOKEN_OP_REC,
+
+
+    TOKEN_START_BRACKET,
+    TOKEN_END_BRACKET,
+
+
 
     TOKEN_COMP_CARRY,
     TOKEN_COMP_ZERO,
@@ -44,6 +49,7 @@ enum Token_Type{
     TOKEN_COMP_LESS_EQ,
     TOKEN_COMP_ODD,
 
+    TOKEN_IO,
     TOKEN_REGISTER,
     TOKEN_REG_POINTER,
 
