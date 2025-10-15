@@ -1,6 +1,8 @@
 #include "tokenize.h"
 #include "error.h"
 #include "quit.h"
+#include "print_functions.h"
+
 #include <stdbool.h>
 #include <string.h>
 #include <ctype.h>
@@ -194,26 +196,7 @@ Token_File* tokenize_file(File_Info *file, ErrorData *error){
 
 
 
-void print_tk_files(Token_File_Manager *tk_manager){
 
-    for(int f = 0; f < tk_manager->amount_files; f++){
-
-        printf("\n\n");
-
-        Token_Line *token_line = tk_manager->tk_files[f]->head;
-
-        while(token_line){
-
-            for(int x = 0; x < token_line->amount_tokens; x++){
-                printf("%s ", token_line->tk[x].text);
-            }
-            printf("- line %d\n", token_line->original_line);
-
-            token_line = token_line->next;
-        }
-
-    }
-}
 
 
 int tokenize(void *appstate){

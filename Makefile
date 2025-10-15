@@ -1,6 +1,6 @@
 GCC = gcc
 #GCC = C:\MinGW\bin\gcc.exe -IC:\MinGW\include
-SRC = src/*.c
+SRC = src/*.c src/utilities/*.c
 INCLUDE = -Iinclude -Iinclude/functions -Iinclude/structures
 LINK = -lMemTrack
 

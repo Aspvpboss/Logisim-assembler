@@ -3,8 +3,10 @@
 
 typedef enum{
 
+    SYMBOL_NONE,
     SYMBOL_LABEL,
-    SYMBOL_MACRO,
+    SYMBOL_MACRO_MUL,
+    SYMBOL_MACRO_SINGLE
 
 } Symbol_Type;
 
@@ -13,7 +15,7 @@ typedef struct{
 
     void *data;
     char *text;
-    bool export;
+    bool is_glob;
     Symbol_Type type;
 
 } Symbol;
@@ -21,7 +23,7 @@ typedef struct{
 
 typedef struct{
 
-    Symbol **symbols;
+    Symbol *symbols;
     uint16_t amount_symbols;
     char *file;
 
@@ -30,7 +32,7 @@ typedef struct{
 
 typedef struct{
 
-    Symbol_Table **tables;
+    Symbol_Table *tables;
     uint16_t amount_tables;
 
 } Symbol_Table_Manager;

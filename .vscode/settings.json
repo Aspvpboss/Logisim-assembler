@@ -13,6 +13,8 @@
         "ctype.h": "c",
         "assembler_configs.h": "c",
         "stdint.h": "c",
-        "sstream": "c"
+        "sstream": "c",
+        "symbol_table.h": "c",
+        "lexical_functions.h": "c"
     }
 }

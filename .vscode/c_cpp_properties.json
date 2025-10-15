@@ -6,8 +6,7 @@
                 "${default}",
                 "${workspaceFolder}/include",
                 "${workspaceFolder}/include/functions",
-                "${workspaceFolder}/include/structures",
-                "${workspaceFolder}/MemTrack/include"
+                "${workspaceFolder}/include/structures"
             ],
             "defines": [
                 "_DEBUG",
