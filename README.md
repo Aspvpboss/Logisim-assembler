@@ -13,11 +13,13 @@ this is a assembler for my logisim computer
 
 *lex files    
 
-get symbols
+get symbols and exported symbols
+
+generate dump file
 
 resolve includes
 
-resolve macros
+expand macros
 
 parse
 

@@ -9,4 +9,12 @@ typedef struct{
     uint8_t amount_args;
     Token_Line *head;
 
-} Macro_Data;
+} Mul_Macro_Data;
+
+typedef struct{
+
+    char *name;
+    char *macro;
+
+} Single_Macro_Data;
+

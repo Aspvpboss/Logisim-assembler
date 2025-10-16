@@ -1,45 +1,18 @@
 #include "appstate.h"
+#include "error.h"
+
 #include "symbol_table.h"
 #include "tokenize_data.h"
-#include "error.h"
+#include "macro_data.h"
+
 #include "print_functions.h"
-#include "lexical_functions.h"
+#include "lexer_functions.h"
+#include "symbol_functions.h"
+
 
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
-
-
-
-void append_symbols(Token *previous, Token *current, Symbol_Table *symbols){
-
-    Symbol_Type type = SYMBOL_NONE;
-
-    if(current->type == TOKEN_LABEL_COLON && previous->type == TOKEN_LABEL){
-
-        type = SYMBOL_LABEL;
-
-    } else if(current->type == TOKEN_MACRO_MUL && previous->type == TOKEN_MACRO_START){
-
-        type = SYMBOL_MACRO_MUL;
-
-    } else if(current->type == TOKEN_MACRO_SINGLE && previous->type == TOKEN_MACRO_INLINE){
-
-        type = SYMBOL_MACRO_SINGLE;
-
-    }
-
-    if(type == SYMBOL_NONE)
-        return;
-
-    symbols->amount_symbols++;
-
-    // symbols->symbols = t_realloc(symbols->symbols, sizeof(Symbol) * symbols->amount_symbols);
-    // symbols->symbols[symbols->amount_symbols - 1].type = type;
-    // symbols->symbols[symbols->amount_symbols - 1].text = t_strdup()
-    // symbols->symbols[symbols->amount_symbols - 1].
-
-}
 
 
 
@@ -86,6 +59,8 @@ enum Token_Type lex_token(Token *token){
 
     return TOKEN_NONE;
 }
+
+
 
 
 int lex_token_line(Token_Line *token_line, Symbol_Table *symbols){
@@ -148,13 +123,85 @@ int lex_token_line(Token_Line *token_line, Symbol_Table *symbols){
                 break;
         }
 
-
+        append_symbols(previous_token, current_token, symbols, token_line);
 
         previous_token = current_token;
     }
     
     return 0;
 }
+
+
+
+
+void find_glob_symbol(Token_Line *current, Symbol_Table *symbols){
+
+    if(current->amount_tokens != 2)
+        return;
+
+    if(current->tk[0].type != TOKEN_GLOBAL_DIR || current->tk[1].type != TOKEN_NONE)
+        return;
+
+    Symbol *glob_symbol = NULL;
+    glob_symbol = find_symbol_by_name(current->tk[1].text, symbols);
+
+    if(!glob_symbol)
+        return;
+    
+    current->tk[1].type = TOKEN_SYMBOL_EXPORTED;
+    glob_symbol->is_glob = 1;
+    
+    return;
+}
+
+
+
+
+int second_lex_pass(Token_Line *current, Symbol_Table *symbols){
+
+    Symbol *symbol = NULL;
+
+    for(int i = 0; i < current->amount_tokens; i++){
+
+        if(current->tk[i].type != TOKEN_NONE)
+            continue;
+
+        symbol = find_symbol_by_name(current->tk[i].text, symbols);
+
+        if(!symbol)
+            continue;
+
+        switch(symbol->type){
+
+            case SYMBOL_LABEL:
+
+                current->tk[i].type = TOKEN_LABEL_REF;
+
+                break;
+
+            case SYMBOL_MACRO_MUL:
+
+                current->tk[i].type = TOKEN_MACRO_MUL_REF;
+
+                break;
+
+            case SYMBOL_MACRO_SINGLE:
+
+                current->tk[i].type = TOKEN_MACRO_SINGLE_REF;
+
+                break;
+
+            default:
+
+                break;
+        }
+        
+
+    }
+
+    return 0;
+}
+
 
 int lex_file(Token_File *file, Symbol_Table *symbols){
 
@@ -164,28 +211,26 @@ int lex_file(Token_File *file, Symbol_Table *symbols){
 
         lex_token_line(current, symbols);
         current = current->next;
-        printf("\n");
 
     }    
+
+    current = file->head;
+
+    while(current){
+
+        find_glob_symbol(current, symbols);
+        second_lex_pass(current, symbols);
+        
+        current = current->next;
+
+    }    
+
+
 
     return 0;
 }
 
 
-void init_symbol_manager(Symbol_Table_Manager *symbols, Token_File_Manager *manager){
-
-    symbols->tables = t_malloc(sizeof(Symbol_Table) * manager->amount_files);
-    symbols->amount_tables = manager->amount_files;
-
-    for(int i = 0; i < symbols->amount_tables; i++){
-
-        symbols->tables[i].file = t_strdup(manager->tk_files[i]->path);
-        symbols->tables[i].symbols = NULL;
-        symbols->tables[i].amount_symbols = 0;
-
-    }
-
-}
 
 
 int lexical_analysis(Appstate *state){
@@ -195,15 +240,12 @@ int lexical_analysis(Appstate *state){
 
     init_symbol_manager(symbols, manager);
 
-
-
     for(int i = 0; i < state->tk_manager.amount_files; i++){
         lex_file(manager->tk_files[i], &symbols->tables[i]);
     }    
 
-    
+    print_symbols(symbols);
     print_file_lex(manager);
-
-
+    
     return 0;
 }

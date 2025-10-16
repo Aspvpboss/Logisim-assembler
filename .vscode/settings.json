@@ -15,6 +15,7 @@
         "stdint.h": "c",
         "sstream": "c",
         "symbol_table.h": "c",
-        "lexical_functions.h": "c"
+        "lexical_functions.h": "c",
+        "tokenize_data.h": "c"
     }
 }

@@ -2,6 +2,7 @@
 
 #include "appstate.h"
 #include "tokenize.h"
+#include "symbol_table.h"
 
 void quit(Appstate *state);
 void free_tokenized_file(Token_File *tf);

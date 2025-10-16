@@ -39,8 +39,12 @@ r0 r7
 
 label:
 
+label
+Inline_Macro_Name
+Macro_Name
 
-.glob
+.glob label
+
 .inline_macro Inline_Macro_Name stuffstuffstuff
 .macrostart Macro_Name vorp vorp
 .macroend

@@ -2,9 +2,7 @@
 
 
 const char* token_type_to_string(enum Token_Type type) {
-
-    switch(type){
-
+    switch (type) {
         case TOKEN_NONE: return "TOKEN_NONE";
 
         case TOKEN_OP_ADD: return "TOKEN_OP_ADD";
@@ -30,11 +28,13 @@ const char* token_type_to_string(enum Token_Type type) {
         case TOKEN_OP_LOD: return "TOKEN_OP_LOD";
         case TOKEN_OP_STR_INDIRECT: return "TOKEN_OP_STR_INDIRECT";
         case TOKEN_OP_LOD_INDIRECT: return "TOKEN_OP_LOD_INDIRECT";
-
         case TOKEN_OP_SND: return "TOKEN_OP_SND";
         case TOKEN_OP_SDI: return "TOKEN_OP_SDI";
         case TOKEN_OP_WRE: return "TOKEN_OP_WRE";
         case TOKEN_OP_REC: return "TOKEN_OP_REC";
+
+        case TOKEN_START_BRACKET: return "TOKEN_START_BRACKET";
+        case TOKEN_END_BRACKET: return "TOKEN_END_BRACKET";
 
         case TOKEN_COMP_CARRY: return "TOKEN_COMP_CARRY";
         case TOKEN_COMP_ZERO: return "TOKEN_COMP_ZERO";
@@ -45,39 +45,51 @@ const char* token_type_to_string(enum Token_Type type) {
         case TOKEN_COMP_LESS_EQ: return "TOKEN_COMP_LESS_EQ";
         case TOKEN_COMP_ODD: return "TOKEN_COMP_ODD";
 
+        case TOKEN_IO: return "TOKEN_IO";
         case TOKEN_REGISTER: return "TOKEN_REGISTER";
         case TOKEN_REG_POINTER: return "TOKEN_REG_POINTER";
 
         case TOKEN_LABEL: return "TOKEN_LABEL";
+        case TOKEN_LABEL_REF: return "TOKEN_LABEL_REF";
         case TOKEN_LABEL_COLON: return "TOKEN_LABEL_COLON";
 
         case TOKEN_STRING_START: return "TOKEN_STRING_START";
         case TOKEN_STRING: return "TOKEN_STRING";
         case TOKEN_STRING_END: return "TOKEN_STRING_END";
 
-        case TOKEN_START_BRACKET: return "TOKEN_START_BRACKET";
-        case TOKEN_END_BRACKET: return "TOKEN_END_BRACKET";
-
         case TOKEN_MACRO_START: return "TOKEN_MACRO_START";
         case TOKEN_MACRO_MUL: return "TOKEN_MACRO_MUL";
+        case TOKEN_MACRO_MUL_REF: return "TOKEN_MACRO_MUL_REF";
         case TOKEN_MACRO_ARGS: return "TOKEN_MACRO_ARGS";
         case TOKEN_MACRO_END: return "TOKEN_MACRO_END";
 
         case TOKEN_MACRO_INLINE: return "TOKEN_MACRO_INLINE";
         case TOKEN_MACRO_SINGLE: return "TOKEN_MACRO_SINGLE";
+        case TOKEN_MACRO_SINGLE_REF: return "TOKEN_MACRO_SINGLE_REF";
 
         case TOKEN_IMMEDIATE: return "TOKEN_IMMEDIATE";
 
-        case TOKEN_AT_DIR: return "TOKEN_AT_DIR";
         case TOKEN_GLOBAL_DIR: return "TOKEN_GLOBAL_DIR";
         case TOKEN_INCLUDE_DIR: return "TOKEN_INCLUDE_DIR";
+        case TOKEN_SYMBOL_EXPORTED: return "TOKEN_SYMBOL_EXPORTED";
+
+        case TOKEN_AT_DIR: return "TOKEN_AT_DIR";
         case TOKEN_START_FILE_DIR: return "TOKEN_START_FILE_DIR";
         case TOKEN_END_FILE_DIR: return "TOKEN_END_FILE_DIR";
 
         default: return "TOKEN_UNKNOWN";
     }
+}
 
-    return NULL;
+
+const char *symbol_type_to_string(Symbol_Type type) {
+    switch (type) {
+        case SYMBOL_NONE:        return "SYMBOL_NONE";
+        case SYMBOL_LABEL:       return "SYMBOL_LABEL";
+        case SYMBOL_MACRO_MUL:   return "SYMBOL_MACRO_MUL";
+        case SYMBOL_MACRO_SINGLE:return "SYMBOL_MACRO_SINGLE";
+        default:                 return "UNKNOWN_SYMBOL_TYPE";
+    }
 }
 
 
@@ -98,8 +110,8 @@ void print_token_files(Token_File_Manager *manager){
 
             token_line = token_line->next;
         }
-
     }
+    printf("\n\n");
 }
 
 
@@ -120,5 +132,30 @@ void print_file_lex(Token_File_Manager *manager){
         }
 
     }
+    printf("\n\n");
+
+}
+
+
+
+void print_symbols(Symbol_Table_Manager *manager){
+
+    for(int file_table = 0; file_table < manager->amount_tables; file_table++){
+
+        Symbol_Table *table = &manager->tables[file_table];
+        printf("\n\n%s\n", table->file);
+
+        for(int symbol = 0; symbol < table->amount_symbols; symbol++){
+
+            const char *symbol_type = symbol_type_to_string(table->symbols[symbol].type);
+
+            printf("%s - %s - exported %s\n", table->symbols[symbol].text, symbol_type, table->symbols[symbol].is_glob ? "true" : "false");
+
+        }
+        printf("\n");
+
+    }
+
+    printf("\n\n");
 
 }

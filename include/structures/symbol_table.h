@@ -1,5 +1,7 @@
 #pragma once
 #include <stdbool.h>
+#include <stdint.h>
+#include "tokenize_data.h"
 
 typedef enum{
 
@@ -17,6 +19,7 @@ typedef struct{
     char *text;
     bool is_glob;
     Symbol_Type type;
+    Token_Line *at_line;
 
 } Symbol;
 

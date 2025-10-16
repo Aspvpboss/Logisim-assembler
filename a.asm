@@ -1,6 +1,9 @@
 at 0x00
 
-.macro MUL_3 reg_dest reg_src 
+.glob MUL_3
+
+
+.macrostart MUL_3 reg_dest reg_src 
 
     add reg_dest reg_src reg_src
     add reg_dest reg_dest reg_src

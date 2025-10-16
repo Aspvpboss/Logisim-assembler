@@ -1,6 +1,7 @@
 #include "quit.h"
 
 
+
 void free_file_manager(File_Manager *manager){
 
     for(int i = 0; i < manager->amount_inputs; i++){
@@ -71,11 +72,56 @@ void free_tok_file_manager(Token_File_Manager *manager){
 }
 
 
+void free_symbol(Symbol *sym){
+
+    t_free(sym->text);
+    t_free(sym->data);
+
+}
+
+
+void free_symbol_table(Symbol_Table *table){
+
+    t_free(table->file);
+
+    for(int i = 0; i < table->amount_symbols; i++){
+
+        free_symbol(&table->symbols[i]);
+
+    }
+
+    t_free(table->symbols);
+
+}
+
+void free_symbol_table_manager(Symbol_Table_Manager *manager){
+
+    for(int i = 0; i < manager->amount_tables; i++){
+
+        free_symbol_table(&manager->tables[i]);
+
+    }
+
+    t_free(manager->tables);
+
+}
+
+
 void quit(Appstate *state){
+
+    printf("\n\nheap usage in bytes - %lld\n", check_memory_usage());
+
+    // printf("Token %zu\n", sizeof(Token));
+    // printf("Token_Line %zu\n", sizeof(Token_Line));
+    // printf("Token_File %zu\n", sizeof(Token_File));
+    // printf("Token_File_Manager %zu\n", sizeof(Token_File_Manager));
+
 
     free_file_manager(&state->manager);
 
     free_tok_file_manager(&state->tk_manager);
+
+    free_symbol_table_manager(&state->symbol_manager);
 
     if(check_memory_leak())
         print_tracking_info();

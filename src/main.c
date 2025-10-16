@@ -1,7 +1,6 @@
-
 #include "init.h"
 #include "tokenize.h"
-#include "lexical.h"
+#include "lexer.h"
 #include "quit.h"
 
 int main(int argc, char **argv){
