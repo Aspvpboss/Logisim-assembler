@@ -1,3 +1,7 @@
+
+
+
+
 at 0x00
 
 .glob MUL_3
@@ -26,4 +30,6 @@ main:
     snd r1 io1
 
     "string" label:
+
+
 

@@ -13,7 +13,7 @@ this is a assembler for my logisim computer
 
 *lex files    
 
-get symbols and exported symbols
+*get symbols and exported symbols
 
 generate dump file
 

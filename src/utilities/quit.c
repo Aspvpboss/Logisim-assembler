@@ -75,6 +75,32 @@ void free_tok_file_manager(Token_File_Manager *manager){
 void free_symbol(Symbol *sym){
 
     t_free(sym->text);
+
+    switch(sym->type){
+
+        case SYMBOL_LABEL:
+            break;
+
+        case SYMBOL_MACRO_MUL:
+            break;
+
+        case SYMBOL_MACRO_SINGLE: {
+
+            Single_Macro_Data *sym_data = (Single_Macro_Data*)sym->data;
+
+            t_free(sym_data->macro);
+
+            break;
+
+        }
+
+
+        default:
+
+            break;
+
+    }
+
     t_free(sym->data);
 
 }
@@ -110,11 +136,6 @@ void free_symbol_table_manager(Symbol_Table_Manager *manager){
 void quit(Appstate *state){
 
     printf("\n\nheap usage in bytes - %lld\n", check_memory_usage());
-
-    // printf("Token %zu\n", sizeof(Token));
-    // printf("Token_Line %zu\n", sizeof(Token_Line));
-    // printf("Token_File %zu\n", sizeof(Token_File));
-    // printf("Token_File_Manager %zu\n", sizeof(Token_File_Manager));
 
 
     free_file_manager(&state->manager);
