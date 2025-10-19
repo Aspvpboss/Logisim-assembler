@@ -16,6 +16,8 @@
         "sstream": "c",
         "symbol_table.h": "c",
         "lexical_functions.h": "c",
-        "tokenize_data.h": "c"
+        "tokenize_data.h": "c",
+        "source_location": "c",
+        "macro_functions.h": "c"
     }
 }

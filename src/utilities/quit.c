@@ -81,9 +81,18 @@ void free_symbol(Symbol *sym){
         case SYMBOL_LABEL:
             break;
 
-        case SYMBOL_MACRO_MUL:
-            break;
+        case SYMBOL_MACRO_MUL:{
 
+            Mul_Macro_Data *sym_data = (Mul_Macro_Data*)sym->data;
+            for(int i = 0; i < sym_data->amount_args; i++){
+                t_free(sym_data->args[i]);
+            }
+            t_free(sym_data->args);
+
+            break;
+        }
+
+        
         case SYMBOL_MACRO_SINGLE: {
 
             Single_Macro_Data *sym_data = (Single_Macro_Data*)sym->data;
@@ -91,7 +100,6 @@ void free_symbol(Symbol *sym){
             t_free(sym_data->macro);
 
             break;
-
         }
 
 

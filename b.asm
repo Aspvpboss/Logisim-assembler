@@ -41,10 +41,18 @@ label:
 
 label
 Inline_Macro_Name
-Macro_Name
+
+Macro_Name r0 r2 r3 r7 r8 r9
 
 .glob label
 
 .inline_macro Inline_Macro_Name stuffstuffstuff
-.macrostart Macro_Name vorp vorp
+
+
+
+.macrostart Macro_Name arg1 arg2 arg3
+
+add arg1 arg2 arg3 arg4
+add arg2 arg3 arg1
+
 .macroend

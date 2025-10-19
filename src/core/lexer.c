@@ -8,12 +8,12 @@
 #include "print_functions.h"
 #include "lexer_functions.h"
 #include "symbol_functions.h"
+#include "macro_functions.h"
 
 
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
-
 
 
 
@@ -203,45 +203,6 @@ int find_symbol_references(Token_Line *current, Symbol_Table *symbols){
 }
 
 
-void lex_mul_macros(Token_Line *symbol_line, Symbol *current_symbol){
-
-
-
-}
-
-
-void lex_all_macros(Symbol_Table *symbols){
-
-
-    for(int i = 0; i < symbols->amount_symbols; i++){
-
-        Symbol *current_symbol = &symbols->symbols[i];
-
-        if(current_symbol->type == SYMBOL_NONE || current_symbol->type == SYMBOL_LABEL)
-            continue;
-
-        Token_Line *symbol_line = current_symbol->at_line;
-
-        if(current_symbol->type == SYMBOL_MACRO_SINGLE){
-
-            if(symbol_line->amount_tokens != 3)
-                return;
-
-            symbol_line->tk[2].type = TOKEN_MACRO_ARGS;
-            Single_Macro_Data* data = (Single_Macro_Data*) current_symbol->data;
-            data->macro = t_strdup(symbol_line->tk[2].text);
-
-        } else{
-
-
-
-
-
-        }
-            
-    }
-
-}
 
 
 

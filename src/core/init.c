@@ -51,7 +51,7 @@ int parse_command_args(Appstate *state, int argc, char *argv[], ErrorData *error
 
             if(!validate_paths(argv[i + 1], ".txt")){
                 error->code = 2;
-                error->string = t_strdup(argv[i]);
+                error->string = t_strdup(argv[i + 1]);
                 return 1;
             }
 
