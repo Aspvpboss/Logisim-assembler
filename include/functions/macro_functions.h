@@ -3,5 +3,6 @@
 #include "macro_data.h"
 #include "tokenize_data.h"
 #include "symbol_table.h"
+#include "error.h"
 
-void lex_all_macros(Symbol_Table *symbols);
+int lex_all_macros(Symbol_Table *symbols, ErrorData *error);

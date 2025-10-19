@@ -6,7 +6,9 @@
                 "${default}",
                 "${workspaceFolder}/include",
                 "${workspaceFolder}/include/functions",
-                "${workspaceFolder}/include/structures"
+                "${workspaceFolder}/include/structures",
+                "${workspaceFolder}/include/utilities",
+                "${workspaceFolder}/include/core"
             ],
             "defines": [
                 "_DEBUG",

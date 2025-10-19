@@ -20,6 +20,8 @@ void free_file_manager(File_Manager *manager){
     t_free(manager->output.raw_text);
     if(manager->output.file)
         fclose(manager->output.file);
+    manager->output.file = NULL;
+    manager->amount_inputs = 0;
 
 }
 
@@ -142,8 +144,6 @@ void free_symbol_table_manager(Symbol_Table_Manager *manager){
 
 
 void quit(Appstate *state){
-
-    printf("\n\nheap usage in bytes - %lld\n", check_memory_usage());
 
 
     free_file_manager(&state->manager);

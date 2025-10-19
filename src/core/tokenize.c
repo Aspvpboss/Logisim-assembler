@@ -147,7 +147,7 @@ Token_Line* tokenize_line(const char *raw_line, const char *file_name, uint16_t 
 }
 
 
-Token_File* tokenize_file(File_Info *file, ErrorData *error){
+Token_File* tokenize_file(File_Info *file, ErrorData *result){
 
     Token_File *token_file = t_malloc(sizeof(Token_File));
     token_file->path = t_strdup(file->path);
@@ -185,7 +185,7 @@ Token_File* tokenize_file(File_Info *file, ErrorData *error){
     token_file->amount_lines = amount_lines;
 
     if(token_file->amount_lines <= 2){
-        error->code = 3;   
+        result->code = 3;   
         free_tokenized_file(token_file);
         t_free(token_file);
         return NULL;

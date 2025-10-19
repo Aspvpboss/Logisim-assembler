@@ -65,12 +65,18 @@ void LogError(ErrorCode error, ErrorData *data){
 
             break;
 
-        case(LEXICAL_ERROR):
+        case(MACRO_ERROR):
 
             switch(data->code){
 
 
                 case(1):
+                    break;
+
+                case(2):
+
+                    printf("Macro error: duplicate macro args detected at line '%d'\n", data->data);
+
                     break;
                 
 

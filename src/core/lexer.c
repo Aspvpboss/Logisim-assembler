@@ -206,7 +206,7 @@ int find_symbol_references(Token_Line *current, Symbol_Table *symbols){
 
 
 
-int lex_file(Token_File *file, Symbol_Table *symbols){
+int lex_file(Token_File *file, Symbol_Table *symbols, ErrorData *result){
 
     Token_Line *current = file->head;
 
@@ -228,7 +228,8 @@ int lex_file(Token_File *file, Symbol_Table *symbols){
 
     }    
 
-    lex_all_macros(symbols);
+    if(lex_all_macros(symbols, result))
+        return 1;
 
     return 0;
 }
@@ -238,17 +239,18 @@ int lex_file(Token_File *file, Symbol_Table *symbols){
 
 int lexical_analysis(Appstate *state){
 
+    ErrorData result = {0};
+    result.string = NULL;
+
     Token_File_Manager *manager = &state->tk_manager;
     Symbol_Table_Manager *symbols = &state->symbol_manager;
 
     init_symbol_manager(symbols, manager);
 
     for(int i = 0; i < state->tk_manager.amount_files; i++){
-        lex_file(manager->tk_files[i], &symbols->tables[i]);
+        lex_file(manager->tk_files[i], &symbols->tables[i], &result);
     }    
 
-    print_symbols(symbols);
-    print_file_lex(manager);
     
     return 0;
 }

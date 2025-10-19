@@ -1,9 +1,11 @@
 #pragma once
 
 enum Output_Type{
+    
     NO_OUTPUT,
     BINARY_OUTPUT,
     HEX_OUTPUT
+
 };
 
 typedef struct{
