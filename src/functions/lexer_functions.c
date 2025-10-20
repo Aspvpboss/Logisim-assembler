@@ -109,6 +109,9 @@ enum Token_Type check_directives(char *str){
     if(strcmp(str, ".include") == 0)
         return TOKEN_INCLUDE_DIR;
 
+    if(strcmp(str, ".extern") == 0)
+        return TOKEN_EXTERN_DIR;
+
     if(strcmp(str, ".at") == 0)
         return TOKEN_AT_DIR;
 

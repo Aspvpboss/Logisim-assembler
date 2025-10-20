@@ -76,6 +76,7 @@ enum Token_Type{
     
     TOKEN_GLOBAL_DIR,
     TOKEN_INCLUDE_DIR,
+    TOKEN_EXTERN_DIR,
     TOKEN_SYMBOL_EXPORTED,
 
     TOKEN_AT_DIR,

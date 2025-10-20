@@ -31,7 +31,8 @@ void append_symbols(Token *previous, Token *current, Symbol_Table *symbols, Toke
 
     symbol->type = type;
     symbol->at_line = token_line;
-    symbol->is_glob = 0;
+    symbol->is_exported = 0;
+    symbol->is_imported = 0;
 
 
     if(type == SYMBOL_LABEL){
@@ -75,7 +76,7 @@ void init_symbol_manager(Symbol_Table_Manager *symbols, Token_File_Manager *mana
 
     for(int i = 0; i < symbols->amount_tables; i++){
 
-        symbols->tables[i].file = t_strdup(manager->tk_files[i]->path);
+        symbols->tables[i].file = t_strdup(manager->tk_files[i]->file);
         symbols->tables[i].symbols = NULL;
         symbols->tables[i].amount_symbols = 0;
 

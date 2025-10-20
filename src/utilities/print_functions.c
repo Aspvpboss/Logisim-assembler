@@ -71,6 +71,7 @@ const char* token_type_to_string(enum Token_Type type) {
 
         case TOKEN_GLOBAL_DIR: return "TOKEN_GLOBAL_DIR";
         case TOKEN_INCLUDE_DIR: return "TOKEN_INCLUDE_DIR";
+        case TOKEN_EXTERN_DIR: return "TOKEN_EXTERN_DIR";
         case TOKEN_SYMBOL_EXPORTED: return "TOKEN_SYMBOL_EXPORTED";
 
         case TOKEN_AT_DIR: return "TOKEN_AT_DIR";
@@ -149,7 +150,7 @@ void print_symbols(Symbol_Table_Manager *manager){
 
             const char *symbol_type = symbol_type_to_string(table->symbols[symbol].type);
 
-            printf("%s - %s - exported %s\n", table->symbols[symbol].text, symbol_type, table->symbols[symbol].is_glob ? "true" : "false");
+            printf("%s - %s - exported %s\n", table->symbols[symbol].text, symbol_type, table->symbols[symbol].is_exported ? "true" : "false");
 
         }
         printf("\n");

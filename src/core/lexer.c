@@ -149,7 +149,7 @@ void find_glob_symbol(Token_Line *current, Symbol_Table *symbols){
         return;
     
     current->tk[1].type = TOKEN_SYMBOL_EXPORTED;
-    glob_symbol->is_glob = 1;
+    glob_symbol->is_exported = 1;
     
     return;
 }
@@ -256,6 +256,7 @@ int lexical_analysis(Appstate *state){
 
     }    
 
+    print_file_lex(manager);
     
     return 0;
 }

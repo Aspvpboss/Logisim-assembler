@@ -17,7 +17,8 @@ typedef struct{
 
     void *data;
     char *text;
-    bool is_glob;
+    bool is_exported;
+    bool is_imported;
     Symbol_Type type;
     Token_Line *at_line;
 
