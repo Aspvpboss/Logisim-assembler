@@ -108,14 +108,14 @@ int lex_all_macros(Symbol_Table *symbols, ErrorData *result){
         if(current_symbol->type == SYMBOL_MACRO_SINGLE){
 
             if(lex_single_macros(symbol_line, current_symbol)){
-                Set_ErrorData(result, 1, current_symbol->at_line->original_line, NULL, current_symbol->at_line->path);
+                Set_ErrorData(result, 1, current_symbol->at_line->original_line, NULL, current_symbol->at_line->file);
                 return 1;
             }
 
         } else{
 
             if(lex_mul_macros(symbol_line, current_symbol)){
-                Set_ErrorData(result, 2, current_symbol->at_line->original_line, NULL, current_symbol->at_line->path);
+                Set_ErrorData(result, 2, current_symbol->at_line->original_line, NULL, current_symbol->at_line->file);
                 return 1;
             }
 

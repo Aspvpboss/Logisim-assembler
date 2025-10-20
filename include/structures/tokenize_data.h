@@ -96,7 +96,7 @@ typedef struct Token_Line{
 
     uint8_t amount_tokens;
     Token *tk;
-    char *path;
+    char *file;
     uint16_t original_line;
     struct Token_Line *next;
 
@@ -108,7 +108,7 @@ typedef struct{
     Token_Line *head;
     Token_Line *tail;
     uint16_t amount_lines;
-    char *path;
+    char *file;
 
 } Token_File;
 

@@ -34,7 +34,7 @@ void free_tokenized_line(Token_Line *tl){
 
     
     t_free(tl->tk);
-    t_free(tl->path);
+    t_free(tl->file);
 
 }
 
@@ -47,7 +47,7 @@ void free_tokenized_file(Token_File *tf){
         
         next = current->next;
         free_tokenized_line(current);
-        t_free(current->path);
+        t_free(current->file);
         t_free(current);
         current = next;
 
@@ -56,7 +56,7 @@ void free_tokenized_file(Token_File *tf){
     tf->head = NULL;
     tf->tail = NULL;
 
-    t_free(tf->path);
+    t_free(tf->file);
 }
 
 void free_tok_file_manager(Token_File_Manager *manager){

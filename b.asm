@@ -46,7 +46,7 @@ Macro_Name r0 r2 r3 r7 r8 r9
 
 .glob label
 
-.inline_macro Inline_Macro_Name stuffstuffstuff asdd as
+.inline_macro Inline_Macro_Name stuffstuffstuf
 
 
 

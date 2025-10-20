@@ -1,8 +1,4 @@
-this is a assembler for my logisim computer
-
-29
-
-
+this is a assembler for my redstone computer
 
 
 
@@ -14,8 +10,6 @@ this is a assembler for my logisim computer
 *lex files    
 
 *get symbols and exported symbols
-
-generate dump file
 
 resolve includes
 

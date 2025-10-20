@@ -31,7 +31,7 @@ Token_Line* tokenize_line(const char *raw_line, const char *file_name, uint16_t 
     Token_Line *tok_line = t_malloc(sizeof(Token_Line));
     tok_line->amount_tokens = 0;
     tok_line->tk = NULL;
-    tok_line->path = t_strdup(file_name);
+    tok_line->file = t_strdup(file_name);
     tok_line->original_line = original_line;
 
     char *line = t_strdup(raw_line);
@@ -150,7 +150,7 @@ Token_Line* tokenize_line(const char *raw_line, const char *file_name, uint16_t 
 Token_File* tokenize_file(File_Info *file, ErrorData *result){
 
     Token_File *token_file = t_malloc(sizeof(Token_File));
-    token_file->path = t_strdup(file->path);
+    token_file->file = t_strdup(file->path);
 
     Token_Line *token_line = NULL;
     token_file->head = NULL;
