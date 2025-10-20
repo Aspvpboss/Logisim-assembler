@@ -41,7 +41,7 @@ int parse_command_args(Appstate *state, int argc, char *argv[], ErrorData *resul
     manager->output.path = NULL;
 
     if(argc <= 1){
-        result->code = 4;
+        Set_ErrorData(result, 4, 0, NULL, NULL);
         return 1;
     }
 
@@ -50,8 +50,7 @@ int parse_command_args(Appstate *state, int argc, char *argv[], ErrorData *resul
         if(strcmp(argv[i], "-o") == 0 && i + 1 < argc){
 
             if(!validate_paths(argv[i + 1], ".txt")){
-                result->code = 2;
-                result->string = t_strdup(argv[i + 1]);
+                Set_ErrorData(result, 2, 0, argv[i + 1], NULL);
                 return 1;
             }
 
@@ -64,21 +63,23 @@ int parse_command_args(Appstate *state, int argc, char *argv[], ErrorData *resul
         }
 
         if(strcmp(argv[i], "-B") == 0){
+
             if(configs->output_type != NO_OUTPUT){
-                result->code = 5;
-                result->string = t_strdup(argv[i]);
+                Set_ErrorData(result, 5, 0, argv[i], NULL);
                 return 1;
             }
+
             configs->output_type = BINARY_OUTPUT;
             continue;
         }
 
         if(strcmp(argv[i], "-H") == 0){
+
             if(configs->output_type != NO_OUTPUT){
-                result->code = 5;
-                result->string = t_strdup(argv[i]);
+                Set_ErrorData(result, 5, 0, argv[i], NULL);
                 return 1;
             }
+
             configs->output_type = HEX_OUTPUT;
             continue;
         }
@@ -97,8 +98,7 @@ int parse_command_args(Appstate *state, int argc, char *argv[], ErrorData *resul
             continue;
         }
 
-        result->code = 1;
-        result->string = t_strdup(argv[i]);
+        Set_ErrorData(result, 1, 0, argv[i], NULL);
         return 1;
 
     }
@@ -106,17 +106,17 @@ int parse_command_args(Appstate *state, int argc, char *argv[], ErrorData *resul
  
 
     if(!manager->amount_inputs){
-        result->code = 7;
+        Set_ErrorData(result, 7, 0, NULL, NULL);
         return 1;
     }
 
     if(manager->output.path == NULL){
-        result->code = 3;
+        Set_ErrorData(result, 3, 0, NULL, NULL);
         return 1;
     }
 
     if(configs->output_type == NO_OUTPUT){
-        result->code = 6;
+        Set_ErrorData(result, 6, 0, NULL, NULL);
         return 1;
     }
 
@@ -148,7 +148,7 @@ int open_files(File_Manager *manager, ErrorData *result){
     output->file = NULL; 
     output->file = fopen(output->path, "w"); 
     if(output->file == NULL){
-        result->code = 1;
+        result->specific_code = 1;
         return 1;
     }
     output->num_lines = 0;
@@ -158,7 +158,7 @@ int open_files(File_Manager *manager, ErrorData *result){
         inputs[i].file = NULL;
         inputs[i].file = fopen(inputs[i].path, "r");
         if(inputs[i].file == NULL){
-            result->code = 2;
+            result->specific_code = 2;
             result->string = t_strdup(inputs[i].path);
             return 1;            
         }

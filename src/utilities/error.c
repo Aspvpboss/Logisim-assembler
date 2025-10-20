@@ -3,42 +3,45 @@
 #include <string.h>
 
 
-void LogError(ErrorCode error, ErrorData *data){
+void LogError(ErrorCode general_error, ErrorData *result){
 
-    puts("\n");
+    fputs("\n", stderr);
 
-    switch(error){
+    switch(general_error){
 
         case(ASSEMBLE_ARGS_ERROR):
 
-            switch(data->code){
+            switch(result->specific_code){
 
                 case(1):
-                    printf("Command prompt error: invalid command arg '%s'\n", data->string);
+                    fprintf(stderr, "Command prompt error: invalid command arg '%s'\n", 
+                            result->string);
                     break;
 
                 case(2):
-                    printf("Command prompt error: invalid output arg '%s'\n", data->string);
+                    fprintf(stderr, "Command prompt error: invalid output arg '%s'\n", 
+                            result->string);
                     break;
 
                 case(3):
-                    printf("Command prompt error: no output file given\n");
+                    fprintf(stderr, "Command prompt error: no output file given\n");
                     break;
 
                 case(4):
-                    printf("Command prompt error: no command args given\n");
+                    fprintf(stderr, "Command prompt error: no command args given\n");
                     break;
 
                 case(5):
-                    printf("Command prompt error: duplicate output type flags '%s'\n", data->string);
+                    fprintf(stderr, "Command prompt error: duplicate output type flags '%s'\n", 
+                            result->string);
                     break;
 
                 case(6):
-                    printf("Command prompt error: no output type flag given\n");
+                    fprintf(stderr, "Command prompt error: no output type flag given\n");
                     break;
 
                 case(7):
-                    printf("Command prompt error: no input file given\n");
+                    fprintf(stderr, "Command prompt error: no input file given\n");
                     break;
 
             }
@@ -47,18 +50,20 @@ void LogError(ErrorCode error, ErrorData *data){
 
         case(FILE_ERROR):
 
-            switch(data->code){
+            switch(result->specific_code){
             
                 case(1):
-                    printf("File error: failed to open output file '%s'\n", data->string);
+                    fprintf(stderr, "File error: failed to open output file '%s'\n", 
+                            result->string);
                     break;
             
                 case(2):
-                    printf("File error: failed to open an input file '%s'\n", data->string);
+                    fprintf(stderr, "File error: failed to open an input file '%s'\n", 
+                            result->string);
                     break;
             
                 case(3):
-                    printf("File error: an input file is empty\n");
+                    fprintf(stderr, "File error: an input file is empty\n");
                     break;
 
             }
@@ -67,19 +72,17 @@ void LogError(ErrorCode error, ErrorData *data){
 
         case(MACRO_ERROR):
 
-            switch(data->code){
-
+            switch(result->specific_code){
 
                 case(1):
+                    fprintf(stderr, "Macro error: inline_macros should be defined with one macro, at line '%d' in file '%s'\n",
+                            result->integer_data, result->file_name);
                     break;
 
                 case(2):
-
-                    printf("Macro error: duplicate macro args detected at line '%d'\n", data->data);
-
+                    fprintf(stderr, "Macro error: duplicate macro args detected, at line '%d' in file '%s'\n",
+                            result->integer_data, result->file_name);
                     break;
-                
-
             }
 
             break;
@@ -90,8 +93,20 @@ void LogError(ErrorCode error, ErrorData *data){
 
     }
 
-    puts("\n");
+    fputs("\n", stderr);
 
-    t_free(data->string);    
+    t_free(result->string);    
+    t_free(result->file_name);
 }
 
+
+void Set_ErrorData(ErrorData *result, uint8_t code, uint32_t integer_data, const char *string_data, const char *file_name){
+
+    result->specific_code = code;
+    result->integer_data = integer_data;
+    if(string_data)
+        result->string = t_strdup(string_data);
+    if(file_name)
+        result->file_name = t_strdup(file_name);
+
+}

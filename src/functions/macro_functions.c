@@ -78,11 +78,13 @@ int lex_mul_macros(Token_Line *symbol_line, Symbol *current_symbol){
 
 int lex_single_macros(Token_Line *symbol_line, Symbol *current_symbol){
 
+    Single_Macro_Data* data = (Single_Macro_Data*) current_symbol->data;
+    data->macro = NULL;
+
     if(symbol_line->amount_tokens != 3)
         return 1;
 
     symbol_line->tk[2].type = TOKEN_MACRO_ARGS;
-    Single_Macro_Data* data = (Single_Macro_Data*) current_symbol->data;
     data->macro = t_strdup(symbol_line->tk[2].text);
 
     return 0;
@@ -91,7 +93,7 @@ int lex_single_macros(Token_Line *symbol_line, Symbol *current_symbol){
 
 
 
-int lex_all_macros(Symbol_Table *symbols, ErrorData *error){
+int lex_all_macros(Symbol_Table *symbols, ErrorData *result){
 
 
     for(int i = 0; i < symbols->amount_symbols; i++){
@@ -106,16 +108,14 @@ int lex_all_macros(Symbol_Table *symbols, ErrorData *error){
         if(current_symbol->type == SYMBOL_MACRO_SINGLE){
 
             if(lex_single_macros(symbol_line, current_symbol)){
-                error->code = 1;
-                error->data = current_symbol->at_line->original_line;
+                Set_ErrorData(result, 1, current_symbol->at_line->original_line, NULL, current_symbol->at_line->path);
                 return 1;
             }
 
         } else{
 
             if(lex_mul_macros(symbol_line, current_symbol)){
-                error->code = 2;
-                error->data = current_symbol->at_line->original_line;
+                Set_ErrorData(result, 2, current_symbol->at_line->original_line, NULL, current_symbol->at_line->path);
                 return 1;
             }
 

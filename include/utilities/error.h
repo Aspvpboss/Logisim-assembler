@@ -15,13 +15,14 @@ typedef enum{
 
 typedef struct{
 
-    uint8_t code;
-    uint32_t data;
+    uint8_t specific_code;
+    uint32_t integer_data;
     char *string;
     char *file_name;
 
 } ErrorData;
 
 
-void LogError(ErrorCode error, ErrorData *data);
+void Set_ErrorData(ErrorData *result, uint8_t code, uint32_t integer_data, const char *string_data, const char *file_name);
+void LogError(ErrorCode general_error, ErrorData *result);
 

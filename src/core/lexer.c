@@ -248,7 +248,12 @@ int lexical_analysis(Appstate *state){
     init_symbol_manager(symbols, manager);
 
     for(int i = 0; i < state->tk_manager.amount_files; i++){
-        lex_file(manager->tk_files[i], &symbols->tables[i], &result);
+
+        if(lex_file(manager->tk_files[i], &symbols->tables[i], &result)){
+            LogError(MACRO_ERROR, &result);
+            return 1;
+        }
+
     }    
 
     

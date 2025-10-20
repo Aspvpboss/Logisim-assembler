@@ -185,7 +185,7 @@ Token_File* tokenize_file(File_Info *file, ErrorData *result){
     token_file->amount_lines = amount_lines;
 
     if(token_file->amount_lines <= 2){
-        result->code = 3;   
+        result->specific_code = 3;   
         free_tokenized_file(token_file);
         t_free(token_file);
         return NULL;
