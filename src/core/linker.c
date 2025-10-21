@@ -63,13 +63,13 @@ void copy_exported_symbols(Symbol_Table *dest, Symbol_Table *src){
 
 int solve_includes_extern(Token_Line *head, ErrorData *result){
 
-    Token_Line *current = head;
+    // Token_Line *current = head;
 
-    while(current){
+    // while(current){
 
 
 
-    }
+    // }
 
 
     return 0;
@@ -79,13 +79,13 @@ int solve_includes_extern(Token_Line *head, ErrorData *result){
 
 int linker(Appstate *state){
 
-    Symbol_Table *tables = state->symbol_manager.tables;
+    // Symbol_Table *tables = state->symbol_manager.tables;
 
-    print_symbols(&state->symbol_manager);
+    // print_symbols(&state->symbol_manager);
     
-    copy_exported_symbols(&tables[0], &tables[1]);
+    // copy_exported_symbols(&tables[0], &tables[1]);
     
-    print_symbols(&state->symbol_manager);
+    // print_symbols(&state->symbol_manager);
 
 
 

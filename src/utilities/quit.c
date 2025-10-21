@@ -34,7 +34,6 @@ void free_tokenized_line(Token_Line *tl){
 
     
     t_free(tl->tk);
-    t_free(tl->file);
 
 }
 
@@ -47,7 +46,6 @@ void free_tokenized_file(Token_File *tf){
         
         next = current->next;
         free_tokenized_line(current);
-        t_free(current->file);
         t_free(current);
         current = next;
 

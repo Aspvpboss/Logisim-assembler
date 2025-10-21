@@ -26,12 +26,12 @@ int check_special(const char c){
 }
 
  
-Token_Line* tokenize_line(const char *raw_line, const char *file_name, uint16_t original_line){
+Token_Line* tokenize_line(const char *raw_line, char *file_name, uint16_t original_line){
 
     Token_Line *tok_line = t_malloc(sizeof(Token_Line));
     tok_line->amount_tokens = 0;
     tok_line->tk = NULL;
-    tok_line->file = t_strdup(file_name);
+    tok_line->file = file_name;
     tok_line->original_line = original_line;
 
     char *line = t_strdup(raw_line);
