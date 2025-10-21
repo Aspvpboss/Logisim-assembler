@@ -44,6 +44,8 @@ void LogError(ErrorCode general_error, ErrorData *result){
                     fprintf(stderr, "Command prompt error: no input file given\n");
                     break;
 
+
+                default: break;
             }
 
             break;
@@ -66,6 +68,8 @@ void LogError(ErrorCode general_error, ErrorData *result){
                     fprintf(stderr, "File error: an input file is empty\n");
                     break;
 
+
+                default: break;
             }
 
             break;
@@ -83,20 +87,32 @@ void LogError(ErrorCode general_error, ErrorData *result){
                     fprintf(stderr, "Macro error: duplicate macro args detected, at line '%d' in file '%s'\n",
                             result->integer_data, result->file_name);
                     break;
+
+
+                default: break;
+
             }
 
             break;
 
-        default:
+        case(LINKER_ERROR):
 
-            break;
+            switch(result->specific_code){
+
+                default: break;
+
+            }
+
+
+        default: break;
 
     }
 
     fputs("\n", stderr);
 
-    t_free(result->string);    
-    t_free(result->file_name);
+    t_free(result->string); 
+    if(!result->file_name)   
+        t_free(result->file_name);
 }
 
 

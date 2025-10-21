@@ -8,7 +8,8 @@ typedef enum{
     NO_ERROR,
     ASSEMBLE_ARGS_ERROR,
     FILE_ERROR,
-    MACRO_ERROR
+    MACRO_ERROR,
+    LINKER_ERROR
 
 } ErrorCode;
 

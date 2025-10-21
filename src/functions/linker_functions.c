@@ -1,0 +1,66 @@
+#include "linker_functions.h"
+#include <MemTrack.h>
+
+Token_Line* copy_Token_Line(const Token_Line *line){
+
+    if(!line)
+        return NULL;
+
+    Token_Line *new_line = t_malloc(sizeof(Token_Line));
+
+    *new_line = *line;
+    new_line->next = NULL;
+    new_line->file = t_strdup(new_line->file);
+    
+    new_line->tk = t_malloc(sizeof(Token) * new_line->amount_tokens);
+
+    for(int i = 0; i < new_line->amount_tokens; i++){
+
+        new_line->tk[i] = line->tk[i];
+        new_line->tk[i].text = t_strdup(line->tk[i].text);
+
+    }
+
+
+
+    return new_line;
+}
+
+
+
+void copy_exported_symbols(Symbol_Table *dest, Symbol_Table *src){
+
+    Symbol *src_symbol = src->symbols;
+    Symbol *dest_symbol = dest->symbols;
+
+    for(int i = 0; i < src->amount_symbols; i++){
+        
+        if(!src_symbol[i].is_exported)
+            continue;
+
+        dest->amount_symbols++;
+        dest_symbol = t_realloc(dest_symbol, sizeof(Symbol) * dest->amount_symbols);
+        Symbol *new_symbol = &dest_symbol[dest->amount_symbols - 1];
+        *new_symbol = src_symbol[i];
+        new_symbol->is_imported = 1;
+        new_symbol->is_exported = 0;
+
+    }
+
+    dest->symbols = dest_symbol;
+}
+
+
+
+Token_File *find_token_file_name(const char *str, Token_File_Manager *token_manager){
+
+    for(int i = 0; i < token_manager->amount_files; i++){
+
+        if(strcmp(token_manager->tk_files[i]->file, str) == 0){
+            return token_manager->tk_files[i];
+        }
+
+    }
+
+    return NULL;
+}

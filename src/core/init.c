@@ -148,7 +148,7 @@ int open_files(File_Manager *manager, ErrorData *result){
     output->file = NULL; 
     output->file = fopen(output->path, "w"); 
     if(output->file == NULL){
-        result->specific_code = 1;
+        Set_ErrorData(result, 1, 0, NULL, NULL);
         return 1;
     }
     output->num_lines = 0;
@@ -158,8 +158,7 @@ int open_files(File_Manager *manager, ErrorData *result){
         inputs[i].file = NULL;
         inputs[i].file = fopen(inputs[i].path, "r");
         if(inputs[i].file == NULL){
-            result->specific_code = 2;
-            result->string = t_strdup(inputs[i].path);
+            Set_ErrorData(result, 2, 0, inputs[i].path, NULL);
             return 1;            
         }
 

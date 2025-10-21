@@ -2,74 +2,55 @@
 #include "tokenize_data.h"
 
 #include "print_functions.h"
+#include "linker_functions.h"
 
 #include "quit.h"
 #include "error.h"
 
 
 
-Token_Line* copy_Token_Line(const Token_Line *line){
 
-    if(!line)
-        return NULL;
 
-    Token_Line *new_line = t_malloc(sizeof(Token_Line));
 
-    *new_line = *line;
-    new_line->next = NULL;
-    new_line->file = t_strdup(new_line->file);
-    
-    new_line->tk = t_malloc(sizeof(Token) * new_line->amount_tokens);
+int include_new_file(Token_Line *current, Token_File_Manager *token_manager, ErrorData *result){
 
-    for(int i = 0; i < new_line->amount_tokens; i++){
+    Token_File *include_file = find_token_file_name(current->file, token_manager);
 
-        new_line->tk[i] = line->tk[i];
-        new_line->tk[i].text = t_strdup(line->tk[i].text);
-
+    if(!include_file){
+        //error stuff
+        return 1;
     }
 
+    Token_Line *include_current = include_file->head;
+    Token_Line *original_next = current->next;
+
+    Token_Line *new_tail = current;
+
+    while(include_current){
+
+        new_tail->next = copy_Token_Line(include_current);
+
+        include_current = include_current->next;
+        new_tail = new_tail->next;
+    }
+
+    new_tail->next = original_next;
 
 
-    return new_line;
+    return 0;
 }
 
 
+int resolve_includes_extern(Token_Line *start, Symbol_Table_Manager *sym_manager, Token_File_Manager *token_manager, ErrorData *result){
 
-void copy_exported_symbols(Symbol_Table *dest, Symbol_Table *src){
+    Token_Line *current = start;
 
-    Symbol *src_symbol = src->symbols;
-    Symbol *dest_symbol = dest->symbols;
+    while(current){
 
-    for(int i = 0; i < src->amount_symbols; i++){
         
-        if(!src_symbol[i].is_exported)
-            continue;
 
-        dest->amount_symbols++;
-        dest_symbol = t_realloc(dest_symbol, sizeof(Symbol) * dest->amount_symbols);
-        Symbol *new_symbol = &dest_symbol[dest->amount_symbols - 1];
-        *new_symbol = src_symbol[i];
-        new_symbol->is_imported = 1;
-        new_symbol->is_exported = 0;
-
+        current = current->next;
     }
-
-    dest->symbols = dest_symbol;
-}
-
-
-
-
-
-int solve_includes_extern(Token_Line *head, ErrorData *result){
-
-    // Token_Line *current = head;
-
-    // while(current){
-
-
-
-    // }
 
 
     return 0;

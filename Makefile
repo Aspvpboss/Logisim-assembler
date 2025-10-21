@@ -6,7 +6,7 @@ INCLUDE = -Iinclude -Iinclude/functions -Iinclude/structures -Iinclude/core -Iin
 
 LINK = -lMemTrack
 
-OUT = out.exe
+OUT = rca.exe
 
 DEBUG = -ex "break main" -ex "run"
 
@@ -19,7 +19,7 @@ BIG_ERROR = -Wall -Werror -Wpedantic -Wextra -fanalyzer
 
 default: build run
 
-d: build debug_run
+d: build debug
 
 
 build:
