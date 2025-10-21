@@ -5,6 +5,17 @@
 
 #include "quit.h"
 
+/*
+
+    current line count is 2116
+    before finishing linking
+    bruh
+
+    this is just including src and include files
+
+*/
+
+
 int main(int argc, char **argv){
 
     Appstate state = {0};
