@@ -67,6 +67,17 @@ Symbol* find_symbol_by_name(const char *str, Symbol_Table *table){
     return NULL;
 }
 
+Symbol_Table* find_symbol_name_by_name(const char *str, Symbol_Table_Manager *table){
+
+    for(int i = 0; i < table->amount_tables; i++){
+        if(strcmp(str, table->tables[i].file) == 0){
+            return &table->tables[i];
+        }
+    }
+
+    return NULL;
+}
+
 
 
 void init_symbol_manager(Symbol_Table_Manager *symbols, Token_File_Manager *manager){

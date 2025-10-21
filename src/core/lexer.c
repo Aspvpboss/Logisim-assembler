@@ -255,8 +255,6 @@ int lexical_analysis(Appstate *state){
         }
 
     }    
-
-    print_file_lex(manager);
     
     return 0;
 }

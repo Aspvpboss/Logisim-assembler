@@ -1,7 +1,7 @@
 #include "init.h"
 #include "tokenize.h"
 #include "lexer.h"
-#include "include.h"
+#include "linker.h"
 
 #include "quit.h"
 
@@ -32,12 +32,12 @@ int main(int argc, char **argv){
 
     printf("\n\nlexical analysis usage - %lld\n", check_memory_usage());
     
-    if(resolve_includes(&state)){
+    if(linker(&state)){
         quit(&state);
         return 1;            
     }
 
-    printf("\n\nresolve_includes usage - %lld\n", check_memory_usage());
+    printf("\n\nlinker usage - %lld\n", check_memory_usage());
 
     quit(&state);
 

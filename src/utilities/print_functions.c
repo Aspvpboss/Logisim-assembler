@@ -150,7 +150,8 @@ void print_symbols(Symbol_Table_Manager *manager){
 
             const char *symbol_type = symbol_type_to_string(table->symbols[symbol].type);
 
-            printf("%s - %s - exported %s\n", table->symbols[symbol].text, symbol_type, table->symbols[symbol].is_exported ? "true" : "false");
+            printf("%s - %s - exported %s - imported %s\n",
+                table->symbols[symbol].text, symbol_type, table->symbols[symbol].is_exported ? "true" : "false", table->symbols[symbol].is_imported ? "true" : "false");
 
         }
         printf("\n");

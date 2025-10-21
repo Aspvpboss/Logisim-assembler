@@ -76,6 +76,9 @@ void free_tok_file_manager(Token_File_Manager *manager){
 
 void free_symbol(Symbol *sym){
 
+    if(sym->is_imported)
+        return;
+
     t_free(sym->text);
 
     switch(sym->type){
