@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <stdbool.h>
 
 enum Token_Type{
 
@@ -110,6 +111,7 @@ typedef struct{
     Token_Line *tail;
     uint16_t amount_lines;
     char *file;
+    bool included;
 
 } Token_File;
 

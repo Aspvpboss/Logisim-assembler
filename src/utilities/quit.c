@@ -42,6 +42,9 @@ void free_tokenized_file(Token_File *tf){
     Token_Line *current = tf->head;
     Token_Line *next = NULL;
 
+    if(tf->included)
+        return;
+
     while(current){
         
         next = current->next;

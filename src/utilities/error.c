@@ -99,6 +99,15 @@ void LogError(ErrorCode general_error, ErrorData *result){
 
             switch(result->specific_code){
 
+                case(1):
+                    fprintf(stderr, "Linker error: .include couldn't find '%s', at line '%d' in file '%s'\nmake sure to assemble all files you want to include\n", 
+                            result->string, result->integer_data, result->file_name);
+                    break;
+                case(2):
+                    fprintf(stderr, "Linker error: '%s' has already been included once, at line '%d' in file '%s'\nyou cannot include a file more than once\n",
+                            result->string, result->integer_data, result->file_name);
+                    break;
+
                 default: break;
 
             }
