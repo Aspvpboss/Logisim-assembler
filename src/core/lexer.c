@@ -134,27 +134,6 @@ int lex_token_line(Token_Line *token_line, Symbol_Table *symbols){
 
 
 
-void find_glob_symbol(Token_Line *current, Symbol_Table *symbols){
-
-    if(current->amount_tokens != 2)
-        return;
-
-    if(current->tk[0].type != TOKEN_GLOBAL_DIR || current->tk[1].type != TOKEN_NONE)
-        return;
-
-    Symbol *glob_symbol = NULL;
-    glob_symbol = find_symbol_by_name(current->tk[1].text, symbols);
-
-    if(!glob_symbol)
-        return;
-    
-    current->tk[1].type = TOKEN_SYMBOL_EXPORTED;
-    glob_symbol->is_exported = 1;
-    
-    return;
-}
-
-
 
 
 int find_symbol_references(Token_Line *current, Symbol_Table *symbols){
@@ -211,8 +190,6 @@ int lex_file(Token_File *file, Symbol_Table *symbols, ErrorData *result){
     Token_Line *current = file->head;
 
     while(current){
-
-        
 
         lex_token_line(current, symbols);
         current = current->next;

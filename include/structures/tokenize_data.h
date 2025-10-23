@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+
 enum Token_Type{
 
     TOKEN_NONE,

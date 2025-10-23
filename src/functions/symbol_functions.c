@@ -67,6 +67,9 @@ Symbol* find_symbol_by_name(const char *str, Symbol_Table *table){
     return NULL;
 }
 
+
+
+
 Symbol_Table* find_symbol_name_by_name(const char *str, Symbol_Table_Manager *table){
 
     for(int i = 0; i < table->amount_tables; i++){
@@ -78,6 +81,27 @@ Symbol_Table* find_symbol_name_by_name(const char *str, Symbol_Table_Manager *ta
     return NULL;
 }
 
+
+
+void find_glob_symbol(Token_Line *current, Symbol_Table *symbols){
+
+    if(current->amount_tokens != 2)
+        return;
+
+    if(current->tk[0].type != TOKEN_GLOBAL_DIR || current->tk[1].type != TOKEN_NONE)
+        return;
+
+    Symbol *glob_symbol = NULL;
+    glob_symbol = find_symbol_by_name(current->tk[1].text, symbols);
+
+    if(!glob_symbol)
+        return;
+    
+    current->tk[1].type = TOKEN_SYMBOL_EXPORTED;
+    glob_symbol->is_exported = 1;
+    
+    return;
+}
 
 
 void init_symbol_manager(Symbol_Table_Manager *symbols, Token_File_Manager *manager){

@@ -3,6 +3,7 @@
 
 #include "print_functions.h"
 #include "linker_functions.h"
+#include "symbol_functions.h"
 
 #include "quit.h"
 #include "error.h"
@@ -52,6 +53,30 @@ int include_new_file(Token_Line *current, Token_File_Manager *token_manager, Err
 
 
 
+void update_glob_symbols(Token_Line *new_include, Symbol_Table_Manager *manager){
+
+    if(!new_include)
+        return;
+
+    Symbol_Table *table = find_symbol_name_by_name(new_include->file, manager);
+
+    if(!table)
+        return;
+
+    Token_Line *current = new_include;
+
+    while(current && current->tk[0].type != TOKEN_END_FILE_DIR){
+
+        find_glob_symbol(current, table);
+
+        current = current->next;
+
+    }
+
+}
+
+
+
 int resolve_includes_extern(Token_Line *start, Symbol_Table_Manager *sym_manager, Token_File_Manager *token_manager, ErrorData *result){
 
     Token_Line *current = start;
@@ -62,6 +87,10 @@ int resolve_includes_extern(Token_Line *start, Symbol_Table_Manager *sym_manager
 
             if(include_new_file(current, token_manager, result))
                 return 1;
+
+            
+
+            update_glob_symbols(current->next, sym_manager);
 
             print_dump_file(token_manager);
         }
