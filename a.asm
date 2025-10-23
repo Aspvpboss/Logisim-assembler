@@ -1,6 +1,8 @@
 
 
+.include "c.asm"
 
+.glob some_label
 
 at 0x00
 

@@ -10,7 +10,7 @@ OUT = rca.exe
 
 DEBUG = -ex "break main" -ex "run"
 
-COMMAND_ARGS = b.asm a.asm -o out.txt -B
+COMMAND_ARGS = b.asm a.asm c.asm -o out.txt -B
 #COMMAND_ARGS = a.asm b.asm 
 
 ERROR = -Wall -Werror -Wpedantic -fanalyzer
