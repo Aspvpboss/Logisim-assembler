@@ -46,8 +46,8 @@ Macro_Name r0 r2 r3 r7 r8 r9
 
 
 .glob label
-.include
-.extern 
+.include "a.asm"
+.extern "a.asm"
 
 
 .inline_macro Inline_Macro_Name stuffstuffstuf

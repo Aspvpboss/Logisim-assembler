@@ -9,15 +9,30 @@
 
 
 
+int check_proper_include(Token_Line *current){
 
+    if(current->amount_tokens != 4)
+        return 0;
+
+    if(current->tk[0].type != TOKEN_INCLUDE_DIR)
+        return 0;
+    if(current->tk[1].type != TOKEN_STRING_START)
+        return 0;
+    if(current->tk[2].type != TOKEN_STRING)
+        return 0;
+    if(current->tk[3].type != TOKEN_STRING_END)
+        return 0;
+
+    return 1;
+}
 
 
 int include_new_file(Token_Line *current, Token_File_Manager *token_manager, ErrorData *result){
 
-    Token_File *include_file = find_token_file_name(current->file, token_manager);
+    Token_File *include_file = find_token_file_name(current->tk[2].text, token_manager);
 
     if(!include_file){
-        //error stuff
+        //couldn't find file error
         return 1;
     }
 
@@ -47,7 +62,11 @@ int resolve_includes_extern(Token_Line *start, Symbol_Table_Manager *sym_manager
 
     while(current){
 
+        if(check_proper_include(current)){
+            include_new_file(current, token_manager, result);
+        }
         
+
 
         current = current->next;
     }
@@ -60,14 +79,11 @@ int resolve_includes_extern(Token_Line *start, Symbol_Table_Manager *sym_manager
 
 int linker(Appstate *state){
 
-    // Symbol_Table *tables = state->symbol_manager.tables;
+    ErrorData result = {0};
 
-    // print_symbols(&state->symbol_manager);
-    
-    // copy_exported_symbols(&tables[0], &tables[1]);
-    
-    // print_symbols(&state->symbol_manager);
+    Token_Line *start = state->tk_manager.tk_files[0]->head;
 
+    resolve_includes_extern(start, &state->symbol_manager, &state->tk_manager, &result);
 
 
     return 0;
