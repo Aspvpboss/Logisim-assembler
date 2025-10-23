@@ -154,11 +154,12 @@ Token_File* tokenize_file(File_Info *file, ErrorData *result){
 
     Token_Line *token_line = NULL;
     token_file->head = NULL;
+    token_file->included = 0;
     uint16_t amount_lines = 0;
 
     for(int i = 0; i < file->num_lines; i++){
 
-        token_line = tokenize_line(file->raw_text[i], file->path, i);
+        token_line = tokenize_line(file->raw_text[i], token_file->file, i);
 
         if(token_line == NULL){
             continue;
