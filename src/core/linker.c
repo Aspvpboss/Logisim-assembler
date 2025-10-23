@@ -9,6 +9,7 @@
 
 
 
+
 int check_proper_include(Token_Line *current){
 
     if(current->amount_tokens != 4)
@@ -25,8 +26,6 @@ int check_proper_include(Token_Line *current){
 
     return 1;
 }
-
-
 
 
 int include_new_file(Token_Line *current, Token_File_Manager *token_manager, ErrorData *result){
