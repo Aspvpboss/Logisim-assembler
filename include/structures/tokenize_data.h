@@ -102,6 +102,7 @@ typedef struct Token_Line{
     char *file;
     uint16_t original_line;
     struct Token_Line *next;
+    void *symbol_table;
 
 } Token_Line;
 
@@ -113,6 +114,7 @@ typedef struct{
     uint16_t amount_lines;
     char *file;
     bool included;
+    void *symbol_table;
 
 } Token_File;
 

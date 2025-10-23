@@ -191,6 +191,7 @@ int lex_file(Token_File *file, Symbol_Table *symbols, ErrorData *result){
 
     while(current){
 
+        current->symbol_table = symbols;
         lex_token_line(current, symbols);
         current = current->next;
 
@@ -227,6 +228,8 @@ int lexical_analysis(Appstate *state){
     init_symbol_manager(symbols, manager);
 
     for(int i = 0; i < state->tk_manager.amount_files; i++){
+
+        manager->tk_files[i]->symbol_table = &symbols->tables[i];
 
         if(lex_file(manager->tk_files[i], &symbols->tables[i], &result)){
             LogError(MACRO_ERROR, &result);

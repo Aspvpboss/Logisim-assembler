@@ -53,17 +53,14 @@ int include_new_file(Token_Line *current, Token_File_Manager *token_manager, Err
 
 
 
-void update_glob_symbols(Token_Line *new_include, Symbol_Table_Manager *manager){
+void update_glob_symbols(Token_Line *new_include, Symbol_Table *table){
 
-    if(!new_include)
-        return;
-
-    Symbol_Table *table = find_symbol_name_by_name(new_include->file, manager);
-
-    if(!table)
+    if(!new_include || table)
         return;
 
     Token_Line *current = new_include;
+
+    printf("includo\n");
 
     while(current && current->tk[0].type != TOKEN_END_FILE_DIR){
 
@@ -88,15 +85,11 @@ int resolve_includes_extern(Token_Line *start, Symbol_Table_Manager *sym_manager
             if(include_new_file(current, token_manager, result))
                 return 1;
 
+            copy_exported_symbols((Symbol_Table*)current->symbol_table, (Symbol_Table*)current->next->symbol_table);
+            update_glob_symbols(current->next, (Symbol_Table*)current->next->symbol_table);
             
-
-            update_glob_symbols(current->next, sym_manager);
-
-            print_dump_file(token_manager);
         }
         
-
-
         current = current->next;
     }
 
@@ -119,6 +112,9 @@ int linker(Appstate *state){
         return 1;
     }
 
+    print_dump_file(&state->tk_manager);
+    print_file_lex(&state->tk_manager);
+    print_symbols(&state->symbol_manager);
 
     return 0;
 }
