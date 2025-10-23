@@ -116,6 +116,30 @@ void print_token_files(Token_File_Manager *manager){
 }
 
 
+void print_dump_file(Token_File_Manager *manager){
+
+    printf("\nDump File (pre macro expansions)\n");
+
+    Token_Line *token_line = manager->tk_files[0]->head;
+
+    while(token_line){
+
+        printf("%s - %-3d:   ", token_line->file, token_line->original_line);
+
+        for(int x = 0; x < token_line->amount_tokens; x++){
+            printf("%s ", token_line->tk[x].text);
+        }
+
+        printf("\n");
+        
+
+        token_line = token_line->next;
+    }
+    
+    printf("\n\n");
+}
+
+
 void print_file_lex(Token_File_Manager *manager){
 
     for(int i = 0; i < manager->amount_files; i++){

@@ -63,7 +63,7 @@ int resolve_includes_extern(Token_Line *start, Symbol_Table_Manager *sym_manager
             if(include_new_file(current, token_manager, result))
                 return 1;
 
-            print_token_files(token_manager);
+            print_dump_file(token_manager);
         }
         
 
