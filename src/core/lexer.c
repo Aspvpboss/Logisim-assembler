@@ -212,6 +212,8 @@ int lex_file(Token_File *file, Symbol_Table *symbols, ErrorData *result){
 
     while(current){
 
+        
+
         lex_token_line(current, symbols);
         current = current->next;
 
