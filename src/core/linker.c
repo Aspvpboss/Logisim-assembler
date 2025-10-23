@@ -76,8 +76,6 @@ void update_glob_symbols(Token_Line *start, Symbol_Table *table){
     while(current && !check_file_end(start)){
 
         find_glob_symbol(current, table);
-        //printf("%s\n", current->tk[0].text);
-
         current = current->next;
 
     }
@@ -124,7 +122,7 @@ int linker(Appstate *state){
         return 1;
     }
 
-    // print_dump_file(&state->tk_manager);
+    print_dump_file(&state->tk_manager);
     // print_file_lex(&state->tk_manager);
     print_symbols(&state->symbol_manager);
 
