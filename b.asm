@@ -45,11 +45,13 @@ Inline_Macro_Name
 Macro_Name r0 r2 r3 r7 r8 r9
 
 
-.glob label
+
 .include "a.asm"
 .extern "a.asm"
 
+.glob label
 .glob MUL_3
+.glob some_label
 
 .inline_macro Inline_Macro_Name stuffstuffstuf
 

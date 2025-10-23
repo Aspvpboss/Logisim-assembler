@@ -95,9 +95,13 @@ int resolve_includes_extern(Token_Line *start, Symbol_Table_Manager *sym_manager
             if(include_new_file(current, token_manager, result))
                 return 1;
 
-            copy_exported_symbols((Symbol_Table*)current->symbol_table, (Symbol_Table*)current->next->symbol_table);
-            update_glob_symbols(current, (Symbol_Table*)current->symbol_table);
-            
+        }
+
+        if(current->next && current->tk[0].type == TOKEN_END_FILE_DIR){
+
+            copy_exported_symbols((Symbol_Table*)current->next->symbol_table, (Symbol_Table*)current->symbol_table);
+            update_glob_symbols(current->next, (Symbol_Table*)current->next->symbol_table);
+
         }
         
         current = current->next;
