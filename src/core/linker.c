@@ -29,18 +29,31 @@ int check_proper_extern(Token_Line *current){
 }
 
 
-int resolve_externs(Token_Line *current, Symbol_Table_Manager *sym_manager, ErrorData *result){
+int resolve_externs(Token_Line *current, Token_File_Manager *token_manager, ErrorData *result){
 
-    if(!current || !sym_manager)
+    if(!current || !token_manager)
         return 1;
 
-    Symbol_Table *table = find_symbol_name_by_name(current->tk[2].text, sym_manager);
+    Token_File *token_file = find_token_file_name(current->tk[2].text, token_manager);
 
-    if(!table){
-        
+    if(!token_file){
+        Set_ErrorData(result, 3, current->original_line, current->tk[2].text, current->file);
         return 1;
     }
 
+    Symbol_Table *new_table = (Symbol_Table*)token_file->symbol_table;
+
+    if(!token_file->included){
+        Set_ErrorData(result, 4, current->original_line, current->tk[2].text, current->file);
+        return 1;        
+    }
+
+
+    copy_exported_symbols(current->symbol_table, new_table);
+    update_glob_symbols(current, current->symbol_table);
+
+
+    return 0;
 }
 
 
@@ -85,36 +98,7 @@ int include_new_file(Token_Line *current, Token_File_Manager *token_manager, Err
     return 0;
 }
 
-int check_file_end(Token_Line *start){
 
-    if(start->amount_tokens != 4)
-        return 0;
-    Token *tokens = start->tk;
-
-    if(tokens[0].type != TOKEN_END_FILE_DIR)
-        return 0;
-
-    if(strcmp(start->file, tokens[2].text) != 0)
-        return 0;
-
-    return 1;
-}
-
-void update_glob_symbols(Token_Line *start, Symbol_Table *table){
-
-    if(!start || !table)
-        return;
-
-    Token_Line *current = start;
-
-    while(current && !check_file_end(current)){
-
-        find_glob_symbol(current, table);
-        current = current->next;
-
-    }
-
-}
 
 
 
@@ -126,7 +110,8 @@ int resolve_includes_extern(Token_Line *start, Symbol_Table_Manager *sym_manager
 
         if(check_proper_extern(current)){
 
-            find_symbol_name_by_name(current->tk[2].text, sym_manager);
+            if(resolve_externs(current, token_manager, result))
+                return 1;
 
         }
 

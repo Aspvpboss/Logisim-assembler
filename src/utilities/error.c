@@ -100,12 +100,19 @@ void LogError(ErrorCode general_error, ErrorData *result){
             switch(result->specific_code){
 
                 case(1):
-                    fprintf(stderr, "Linker error: .include couldn't find '%s', at line '%d' in file '%s'\nmake sure to assemble all files you want to include\n", 
+                    fprintf(stderr, "Linker error: .include couldn't find '%s' as a file, at line '%d' in file '%s'\nmake sure to assemble all files you want to include\n", 
                             result->string, result->integer_data, result->file_name);
                     break;
                 case(2):
                     fprintf(stderr, "Linker error: '%s' has already been included once, at line '%d' in file '%s'\nyou cannot include a file more than once\n",
                             result->string, result->integer_data, result->file_name);
+                case(3):
+                    fprintf(stderr, "Linker error: .extern couldn't find '%s' as a file, at line '%d' in file '%s'\nmake sure to assemble all files you want to extern\n",
+                            result->string, result->integer_data, result->file_name);
+                case(4):
+                    fprintf(stderr, "Linker error: must include '%s' before using .extern on it, at line '%d' in file '%s'\n\n",
+                            result->string, result->integer_data, result->file_name);
+
                     break;
 
                 default: break;
@@ -120,8 +127,7 @@ void LogError(ErrorCode general_error, ErrorData *result){
     fputs("\n", stderr);
 
     t_free(result->string); 
-    if(!result->file_name)   
-        t_free(result->file_name);
+    t_free(result->file_name);
 }
 
 
@@ -129,6 +135,8 @@ void Set_ErrorData(ErrorData *result, uint8_t code, uint32_t integer_data, const
 
     result->specific_code = code;
     result->integer_data = integer_data;
+    result->string = NULL;
+    result->file_name = NULL;
     if(string_data)
         result->string = t_strdup(string_data);
     if(file_name)

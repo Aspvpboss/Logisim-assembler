@@ -1,4 +1,5 @@
 #include "linker_functions.h"
+#include "symbol_functions.h"
 #include <MemTrack.h>
 
 Token_Line* copy_Token_Line(const Token_Line *line){
@@ -63,4 +64,35 @@ Token_File *find_token_file_name(const char *str, Token_File_Manager *token_mana
     }
 
     return NULL;
+}
+
+int check_file_end(Token_Line *start){
+
+    if(start->amount_tokens != 4)
+        return 0;
+    Token *tokens = start->tk;
+
+    if(tokens[0].type != TOKEN_END_FILE_DIR)
+        return 0;
+
+    if(strcmp(start->file, tokens[2].text) != 0)
+        return 0;
+
+    return 1;
+}
+
+void update_glob_symbols(Token_Line *start, Symbol_Table *table){
+
+    if(!start || !table)
+        return;
+
+    Token_Line *current = start;
+
+    while(current && !check_file_end(current)){
+
+        find_glob_symbol(current, table);
+        current = current->next;
+
+    }
+
 }
