@@ -73,7 +73,7 @@ void update_glob_symbols(Token_Line *start, Symbol_Table *table){
 
     Token_Line *current = start;
 
-    while(current && !check_file_end(start)){
+    while(current && !check_file_end(current)){
 
         find_glob_symbol(current, table);
         current = current->next;
