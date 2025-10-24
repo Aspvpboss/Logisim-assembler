@@ -11,6 +11,40 @@
 
 
 
+int check_proper_extern(Token_Line *current){
+
+    if(current->amount_tokens != 4)
+        return 0;
+
+    if(current->tk[0].type != TOKEN_EXTERN_DIR)
+        return 0;
+    if(current->tk[1].type != TOKEN_STRING_START)
+        return 0;
+    if(current->tk[2].type != TOKEN_STRING)
+        return 0;
+    if(current->tk[3].type != TOKEN_STRING_END)
+        return 0;
+
+    return 1;
+}
+
+
+int resolve_externs(Token_Line *current, Symbol_Table_Manager *sym_manager, ErrorData *result){
+
+    if(!current || !sym_manager)
+        return 1;
+
+    Symbol_Table *table = find_symbol_name_by_name(current->tk[2].text, sym_manager);
+
+    if(!table){
+        
+        return 1;
+    }
+
+}
+
+
+
 int check_proper_include(Token_Line *current){
 
     if(current->amount_tokens != 4)
@@ -89,6 +123,12 @@ int resolve_includes_extern(Token_Line *start, Symbol_Table_Manager *sym_manager
     Token_Line *current = start;
     
     while(current){
+
+        if(check_proper_extern(current)){
+
+            find_symbol_name_by_name(current->tk[2].text, sym_manager);
+
+        }
 
         if(check_proper_include(current)){
 
