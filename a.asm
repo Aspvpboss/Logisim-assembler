@@ -2,6 +2,11 @@
 
 .include "c.asm"
 
+add
+add
+add
+add
+
 .glob some_label
 
 at 0x00

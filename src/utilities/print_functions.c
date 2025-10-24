@@ -122,7 +122,16 @@ void print_dump_file(Token_File_Manager *manager){
 
     Token_Line *token_line = manager->tk_files[0]->head;
 
+    if(!token_line)
+        return;
+
+    char *file_name = token_line->file;
+
     while(token_line){
+
+        if(token_line->file != file_name)
+            printf("\n");
+        file_name = token_line->file;
 
         printf("%s - %-3d:   ", token_line->file, token_line->original_line);
 
@@ -131,6 +140,8 @@ void print_dump_file(Token_File_Manager *manager){
         }
 
         printf("\n");
+
+
         
 
         token_line = token_line->next;
