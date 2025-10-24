@@ -145,6 +145,7 @@ int linker(Appstate *state){
     ErrorData result = {0};
 
     Token_Line *start = state->tk_manager.tk_files[0]->head;
+    state->tk_manager.tk_files[0]->included = 0;
 
     if(resolve_includes_extern(start, &state->symbol_manager, &state->tk_manager, &result)){
         LogError(LINKER_ERROR, &result);

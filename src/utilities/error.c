@@ -106,9 +106,11 @@ void LogError(ErrorCode general_error, ErrorData *result){
                 case(2):
                     fprintf(stderr, "Linker error: '%s' has already been included once, at line '%d' in file '%s'\nyou cannot include a file more than once\n",
                             result->string, result->integer_data, result->file_name);
+                    break;
                 case(3):
                     fprintf(stderr, "Linker error: .extern couldn't find '%s' as a file, at line '%d' in file '%s'\nmake sure to assemble all files you want to extern\n",
                             result->string, result->integer_data, result->file_name);
+                    break;
                 case(4):
                     fprintf(stderr, "Linker error: must include '%s' before using .extern on it, at line '%d' in file '%s'\n\n",
                             result->string, result->integer_data, result->file_name);
