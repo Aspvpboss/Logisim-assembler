@@ -1,6 +1,16 @@
 this is a assembler for my redstone computer
 
 
+--things to work on--
+
+
+fixing memory leaks for circular includes
+debug flags for assembler, aka print dump file or symbols
+macros stuff
+
+
+--------------------
+
 
 
 *read files
@@ -11,7 +21,7 @@ this is a assembler for my redstone computer
 
 *get symbols and exported symbols
 
-resolve includes
+*resolve includes
 
 expand macros
 
