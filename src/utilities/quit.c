@@ -159,4 +159,6 @@ void quit(Appstate *state){
     if(check_memory_leak())
         print_tracking_info();
 
+    free_tracking_info();
+
 }
