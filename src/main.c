@@ -52,5 +52,7 @@ int main(int argc, char **argv){
 
     quit(&state);
 
+    printf("No crash!\n");
+
     return 0;
 }

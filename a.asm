@@ -1,6 +1,6 @@
 
 
-.include "c.asm"
+.include "b.asm"
 
 add
 add

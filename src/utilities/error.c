@@ -114,7 +114,10 @@ void LogError(ErrorCode general_error, ErrorData *result){
                 case(4):
                     fprintf(stderr, "Linker error: must include '%s' before using .extern on it, at line '%d' in file '%s'\n\n",
                             result->string, result->integer_data, result->file_name);
-
+                    break;
+                case(5):
+                    fprintf(stderr, "Linker error: '%s' cannot include itself, at line '%d' in file '%s'\n\n",
+                            result->string, result->integer_data, result->file_name);
                     break;
 
                 default: break;

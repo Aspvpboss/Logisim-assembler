@@ -49,7 +49,10 @@ int resolve_externs(Token_Line *current, Token_File_Manager *token_manager, Erro
     }
 
 
-    copy_exported_symbols(current->symbol_table, new_table);
+    if(copy_exported_symbols(current->symbol_table, new_table)){
+        
+        return 1;
+    }
     update_glob_symbols(current, current->symbol_table);
 
 
@@ -86,7 +89,15 @@ int include_new_file(Token_Line *current, Token_File_Manager *token_manager, Err
     }
 
     if(include_file->included){
+        include_file->included = 0;
+        current->next = include_file->tail->next;
+        include_file->tail->next = NULL;
         Set_ErrorData(result, 2, current->original_line, current->tk[2].text, current->file);
+        return 1;
+    }
+
+    if(strcmp(current->file, include_file->file) == 0){
+        Set_ErrorData(result, 5, current->original_line, current->tk[2].text, current->file);
         return 1;
     }
 
@@ -124,9 +135,12 @@ int resolve_includes_extern(Token_Line *start, Symbol_Table_Manager *sym_manager
 
         if(current->next && current->tk[0].type == TOKEN_END_FILE_DIR){
 
-            copy_exported_symbols((Symbol_Table*)current->next->symbol_table, (Symbol_Table*)current->symbol_table);
-            update_glob_symbols(current->next, (Symbol_Table*)current->next->symbol_table);
+            if(copy_exported_symbols((Symbol_Table*)current->next->symbol_table, (Symbol_Table*)current->symbol_table)){
 
+                return 1;
+            }
+            update_glob_symbols(current->next, (Symbol_Table*)current->next->symbol_table);
+ 
         }
         
         current = current->next;
