@@ -34,21 +34,17 @@ int main(int argc, char **argv){
 
     free_file_manager(&state.manager);
 
-    printf("\n\ntokenize usage - %lld\n", check_memory_usage());
 
     if(lexical_analysis(&state)){
         quit(&state);
         return 1;        
     }
 
-    printf("\n\nlexical analysis usage - %lld\n", check_memory_usage());
     
     if(linker(&state)){
         quit(&state);
         return 1;            
     }
-
-    printf("\n\nlinker usage - %lld\n", check_memory_usage());
 
     quit(&state);
 

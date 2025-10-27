@@ -154,7 +154,8 @@ Token_File* tokenize_file(File_Info *file, ErrorData *result){
 
     Token_Line *token_line = NULL;
     token_file->head = NULL;
-    token_file->included = 0;
+    token_file->is_included = 0;
+    token_file->is_root = 0;
     uint16_t amount_lines = 0;
 
     for(int i = 0; i < file->num_lines; i++){
@@ -224,6 +225,10 @@ int tokenize(void *appstate){
         }
 
         amount_files++;
+
+        if(amount_files == 1)
+            tk_file->is_root = 1;
+        
         tk_manager->tk_files = t_realloc(tk_manager->tk_files, sizeof(Token_File*) * amount_files);
         tk_manager->tk_files[amount_files - 1] = tk_file;
 

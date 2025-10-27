@@ -5,6 +5,7 @@
 #include "linker_functions.h"
 #include "symbol_functions.h"
 
+#include "assert.h"
 #include "quit.h"
 #include "error.h"
 
@@ -43,7 +44,7 @@ int resolve_externs(Token_Line *current, Token_File_Manager *token_manager, Erro
 
     Symbol_Table *new_table = (Symbol_Table*)token_file->symbol_table;
 
-    if(!token_file->included){
+    if(!token_file->is_included){
         Set_ErrorData(result, 4, current->original_line, current->tk[2].text, current->file);
         return 1;        
     }
@@ -89,8 +90,16 @@ int include_new_file(Token_Line *current, Token_File_Manager *token_manager, Err
         return 1;
     }
 
-    if(include_file->included){
-        include_file->included = 0;
+
+    if(include_file->is_root){
+        Set_ErrorData(result, 9, current->original_line, include_file->file, current->file);
+        return 1;
+    }
+
+
+    if(include_file->is_included){
+
+        include_file->is_included = 0;
         current->next = include_file->tail->next;
         include_file->tail->next = NULL;
         Set_ErrorData(result, 2, current->original_line, current->tk[2].text, current->file);
@@ -98,14 +107,16 @@ int include_new_file(Token_Line *current, Token_File_Manager *token_manager, Err
     }
 
     if(strcmp(current->file, include_file->file) == 0){
+        
         Set_ErrorData(result, 5, current->original_line, current->tk[2].text, current->file);
         return 1;
     }
 
+
     Token_Line *old_next = current->next;
     current->next = include_file->head;
     include_file->tail->next = old_next;
-    include_file->included = 1;
+    include_file->is_included = 1;
 
     return 0;
 }
@@ -115,16 +126,15 @@ int include_new_file(Token_Line *current, Token_File_Manager *token_manager, Err
 
 
 int resolve_includes_extern(Token_Line *start, Symbol_Table_Manager *sym_manager, Token_File_Manager *token_manager, ErrorData *result){
-
-    Token_Line *current = start;
     
-    while(current){
+    for(Token_Line *current = start; current; current = current->next){
 
         if(check_proper_extern(current)){
 
             if(resolve_externs(current, token_manager, result))
                 return 1;
 
+            
         }
 
         if(check_proper_include(current)){
@@ -143,10 +153,9 @@ int resolve_includes_extern(Token_Line *start, Symbol_Table_Manager *sym_manager
             update_glob_symbols(current->next, (Symbol_Table*)current->next->symbol_table);
  
         }
-        
-        current = current->next;
     }
 
+    printf("hotdog\n");
 
     return 0;
 }
@@ -160,15 +169,15 @@ int linker(Appstate *state){
     ErrorData result = {0};
 
     Token_Line *start = state->tk_manager.tk_files[0]->head;
-    state->tk_manager.tk_files[0]->included = 0;
 
     if(resolve_includes_extern(start, &state->symbol_manager, &state->tk_manager, &result)){
         LogError(LINKER_ERROR, &result);
         return 1;
     }
 
+    
+
     print_dump_file(&state->tk_manager);
-    // print_file_lex(&state->tk_manager);
     print_symbols(&state->symbol_manager);
 
     return 0;

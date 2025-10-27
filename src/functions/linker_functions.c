@@ -41,7 +41,7 @@ int copy_exported_symbols(Symbol_Table *dest, Symbol_Table *src, ErrorData *resu
             continue;
 
         if(find_symbol_by_name(src_symbol[i].text, dest)){
-            Set_ErrorData(result, 0, src_symbol[i].at_line->original_line, src_symbol[i].text, src_symbol[i].at_line->file);
+            Set_ErrorData(result, 0, src_symbol[i].at_line->original_line, dest->file, src_symbol[i].at_line->file);
             return 1;
         }
 

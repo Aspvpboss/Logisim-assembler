@@ -39,7 +39,7 @@ void free_tokenized_file(Token_File *tf){
 
     t_free(tf->file);
 
-    if(tf->included)
+    if(tf->is_included)
         return;
 
     Token_Line *current = tf->head;
@@ -149,6 +149,7 @@ void free_symbol_table_manager(Symbol_Table_Manager *manager){
 
 void quit(Appstate *state){
 
+    printf("final memory usage %lld bytes\n", check_memory_usage());
 
     free_file_manager(&state->manager);
 
@@ -159,8 +160,8 @@ void quit(Appstate *state){
     if(check_memory_leak())
         print_tracking_info();
 
-    free_tracking_info();
 
+    free_tracking_info();
 
     printf("No crash!\n");
 

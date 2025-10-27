@@ -33,7 +33,7 @@ int append_symbols(Token *previous, Token *current, Symbol_Table *symbols, Token
 
     if(existing_symbol){
         Set_ErrorData(
-            result, 8, existing_symbol->at_line->original_line, existing_symbol->text, existing_symbol->at_line->file);
+            result, 8, token_line->original_line, text, token_line->file);
         return 1;
     }
 

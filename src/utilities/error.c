@@ -120,17 +120,22 @@ void LogError(ErrorCode general_error, ErrorData *result){
                             result->string, result->integer_data, result->file_name);
                     break;
                 case(6):
-                    fprintf(stderr, "Linker error: tried to include duplicate symbol '%s', at line '%d' in file '%s'\n\n",
+                    fprintf(stderr, "Linker error: tried to include duplicate symbol into '%s', at line '%d' in file '%s'\n\nDid you .include more than once?",
                             result->string, result->integer_data, result->file_name);
                     break;
                 case(7):
-                    fprintf(stderr, "Linker error: tried to extern duplicate symbol '%s', at line '%d' in file '%s'\n\n",
+                    fprintf(stderr, "Linker error: tried to extern duplicate symbol into '%s', at line '%d' in file '%s'\n\nDid you .extern more than once?",
                             result->string, result->integer_data, result->file_name);
                     break;
                 case(8):
                     fprintf(stderr, "Linker error: duplicate symbol '%s', at line '%d' in file '%s'\n\n",
                             result->string, result->integer_data, result->file_name);
-                    break;                                    
+                    break;     
+                case(9):
+                    fprintf(stderr, "Linker error: cannot include root file '%s', at line '%d' in file '%s'\n\n",
+                            result->string, result->integer_data, result->file_name);
+                    break;     
+                                               
 
                 default: break;
 

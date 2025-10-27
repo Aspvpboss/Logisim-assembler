@@ -1,8 +1,9 @@
 
-.glob some_label
 
-some_label:
+.glob CMP
 
-.extern "a.asm"
+.macrostart CMP regA regB
 
-.glob MUL_3
+    SUB regA regB
+
+.macroend

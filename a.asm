@@ -6,6 +6,7 @@ add
 add
 add
 
+.include "c.asm"
 
 at 0x00
 
