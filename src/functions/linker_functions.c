@@ -30,7 +30,7 @@ Token_Line* copy_Token_Line(const Token_Line *line){
 
 
 
-int copy_exported_symbols(Symbol_Table *dest, Symbol_Table *src){
+int copy_exported_symbols(Symbol_Table *dest, Symbol_Table *src, ErrorData *result){
 
     Symbol *src_symbol = src->symbols;
     Symbol *dest_symbol = dest->symbols;
@@ -40,7 +40,8 @@ int copy_exported_symbols(Symbol_Table *dest, Symbol_Table *src){
         if(!src_symbol[i].is_exported)
             continue;
 
-        if(find_symbol_by_name(src_symbol[i].text, dest_symbol)){
+        if(find_symbol_by_name(src_symbol[i].text, dest)){
+            Set_ErrorData(result, 0, src_symbol[i].at_line->original_line, src_symbol[i].text, src_symbol[i].at_line->file);
             return 1;
         }
 
@@ -54,6 +55,8 @@ int copy_exported_symbols(Symbol_Table *dest, Symbol_Table *src){
     }
 
     dest->symbols = dest_symbol;
+    
+    return 0;
 }
 
 

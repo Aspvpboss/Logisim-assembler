@@ -4,26 +4,38 @@
 #include <MemTrack.h>
 
 
-void append_symbols(Token *previous, Token *current, Symbol_Table *symbols, Token_Line *token_line){
+int append_symbols(Token *previous, Token *current, Symbol_Table *symbols, Token_Line *token_line, ErrorData *result){
 
     Symbol_Type type = SYMBOL_NONE;
+    char *text = NULL;
 
     if(current->type == TOKEN_LABEL_COLON && previous->type == TOKEN_LABEL){
 
         type = SYMBOL_LABEL;
+        text = previous->text;
 
     } else if(current->type == TOKEN_MACRO_MUL && previous->type == TOKEN_MACRO_START){
 
         type = SYMBOL_MACRO_MUL;
+        text = current->text;
 
     } else if(current->type == TOKEN_MACRO_SINGLE && previous->type == TOKEN_MACRO_INLINE){
 
         type = SYMBOL_MACRO_SINGLE;
+        text = current->text;
 
     }
 
     if(type == SYMBOL_NONE)
-        return;
+        return 0;
+
+    Symbol *existing_symbol = find_symbol_by_name(text, symbols);
+
+    if(existing_symbol){
+        Set_ErrorData(
+            result, 8, existing_symbol->at_line->original_line, existing_symbol->text, existing_symbol->at_line->file);
+        return 1;
+    }
 
     symbols->amount_symbols++;
     symbols->symbols = t_realloc(symbols->symbols, sizeof(Symbol) * symbols->amount_symbols);
@@ -37,21 +49,24 @@ void append_symbols(Token *previous, Token *current, Symbol_Table *symbols, Toke
 
     if(type == SYMBOL_LABEL){
 
-        symbol->text = t_strdup(previous->text);
+        symbol->text = t_strdup(text);
         symbol->data = NULL;
 
     } else if(type == SYMBOL_MACRO_MUL){
 
-        symbol->text = t_strdup(current->text);
+        symbol->text = t_strdup(text);
         symbol->data = t_malloc(sizeof(Mul_Macro_Data));
 
     } else if(type == SYMBOL_MACRO_SINGLE){
 
-        symbol->text = t_strdup(current->text);
+        symbol->text = t_strdup(text);
         symbol->data = t_malloc(sizeof(Single_Macro_Data));
 
     }
 
+
+
+    return 0;
 }
 
 

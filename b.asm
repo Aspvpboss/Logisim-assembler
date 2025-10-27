@@ -47,11 +47,13 @@ Macro_Name r0 r2 r3 r7 r8 r9
 
 
 //.include "a.asm"
-.include "b.asm"
-
 
 
 //vorp
+
+MUL_3:
+
+MUL_3:
 
 .glob label
 .glob MUL_3

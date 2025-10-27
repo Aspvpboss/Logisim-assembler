@@ -119,6 +119,18 @@ void LogError(ErrorCode general_error, ErrorData *result){
                     fprintf(stderr, "Linker error: '%s' cannot include itself, at line '%d' in file '%s'\n\n",
                             result->string, result->integer_data, result->file_name);
                     break;
+                case(6):
+                    fprintf(stderr, "Linker error: tried to include duplicate symbol '%s', at line '%d' in file '%s'\n\n",
+                            result->string, result->integer_data, result->file_name);
+                    break;
+                case(7):
+                    fprintf(stderr, "Linker error: tried to extern duplicate symbol '%s', at line '%d' in file '%s'\n\n",
+                            result->string, result->integer_data, result->file_name);
+                    break;
+                case(8):
+                    fprintf(stderr, "Linker error: duplicate symbol '%s', at line '%d' in file '%s'\n\n",
+                            result->string, result->integer_data, result->file_name);
+                    break;                                    
 
                 default: break;
 

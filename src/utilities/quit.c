@@ -161,4 +161,7 @@ void quit(Appstate *state){
 
     free_tracking_info();
 
+
+    printf("No crash!\n");
+
 }

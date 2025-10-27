@@ -4,7 +4,7 @@ this is a assembler for my redstone computer
 --things to work on--
 
 
-fixing memory leaks for circular includes
+error checking for duplicate symbols in file
 debug flags for assembler, aka print dump file or symbols
 macros stuff
 

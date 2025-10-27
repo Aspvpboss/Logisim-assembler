@@ -49,8 +49,8 @@ int resolve_externs(Token_Line *current, Token_File_Manager *token_manager, Erro
     }
 
 
-    if(copy_exported_symbols(current->symbol_table, new_table)){
-        
+    if(copy_exported_symbols(current->symbol_table, new_table, result)){
+        result->specific_code = 7;
         return 1;
     }
     update_glob_symbols(current, current->symbol_table);
@@ -77,6 +77,7 @@ int check_proper_include(Token_Line *current){
 
     return 1;
 }
+
 
 
 int include_new_file(Token_Line *current, Token_File_Manager *token_manager, ErrorData *result){
@@ -135,8 +136,8 @@ int resolve_includes_extern(Token_Line *start, Symbol_Table_Manager *sym_manager
 
         if(current->next && current->tk[0].type == TOKEN_END_FILE_DIR){
 
-            if(copy_exported_symbols((Symbol_Table*)current->next->symbol_table, (Symbol_Table*)current->symbol_table)){
-
+            if(copy_exported_symbols((Symbol_Table*)current->next->symbol_table, (Symbol_Table*)current->symbol_table, result)){
+                result->specific_code = 6;
                 return 1;
             }
             update_glob_symbols(current->next, (Symbol_Table*)current->next->symbol_table);
