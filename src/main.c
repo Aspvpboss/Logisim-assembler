@@ -20,6 +20,8 @@ int main(int argc, char **argv){
 
     Appstate state = {0};
 
+    
+
     if(initialize(&state, argc, argv)){
         quit(&state);
         return 1;
