@@ -25,8 +25,6 @@ int main(int argc, char **argv){
         return 1;
     }
 
-    printf("\n\ninit usage - %lld\n", check_memory_usage());
-
     if(tokenize(&state)){
         quit(&state);
         return 1;

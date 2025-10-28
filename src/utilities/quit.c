@@ -149,7 +149,7 @@ void free_symbol_table_manager(Symbol_Table_Manager *manager){
 
 void quit(Appstate *state){
 
-    printf("final memory usage %lld bytes\n", check_memory_usage());
+    //printf("final memory usage %lld bytes\n", check_memory_usage());
 
     free_file_manager(&state->manager);
 
@@ -163,6 +163,6 @@ void quit(Appstate *state){
 
     free_tracking_info();
 
-    printf("No crash!\n");
+    printf("No crash!\n\n");
 
 }
