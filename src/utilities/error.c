@@ -65,7 +65,7 @@ void LogError(ErrorCode general_error, ErrorData *result){
                     break;
             
                 case(3):
-                    fprintf(stderr, "File error: an input file is empty\n");
+                    fprintf(stderr, "File error: an input file '%s' is empty\n", result->string);
                     break;
 
 

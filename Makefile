@@ -54,6 +54,10 @@ test_run:
 	-${OUT} nothing.asm -o out.txt -B
 	@echo "-------Invalid output file type-------"
 	-${OUT} test_validation/empty.asm -o out.asm -B
+	@echo "-------Inline macro error-------"
+	-${OUT} test_validation/inline_macro.asm -o out.txt -B
+	@echo "-------Multi macro error-------"
+	-${OUT} test_validation/multi_macro.asm -o out.txt -B
 
 	
 
