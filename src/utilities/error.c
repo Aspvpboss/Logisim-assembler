@@ -150,6 +150,7 @@ void LogError(ErrorCode general_error, ErrorData *result){
 
     t_free(result->string); 
     t_free(result->file_name);
+
 }
 
 

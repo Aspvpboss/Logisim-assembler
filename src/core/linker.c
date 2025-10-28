@@ -155,8 +155,6 @@ int resolve_includes_extern(Token_Line *start, Symbol_Table_Manager *sym_manager
         }
     }
 
-    printf("hotdog\n");
-
     return 0;
 }
 

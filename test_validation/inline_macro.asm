@@ -1,3 +1,3 @@
 
 
-inline_macro Macro macro_contents
+.inline_macro Single_Macro 

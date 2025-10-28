@@ -58,6 +58,10 @@ test_run:
 	-${OUT} test_validation/inline_macro.asm -o out.txt -B
 	@echo "-------Multi macro error-------"
 	-${OUT} test_validation/multi_macro.asm -o out.txt -B
+	@echo "-------Cannot find .include file-------"
+	-${OUT} test_validation/no_find_include.asm -o out.txt -B
+	@echo "-------Double .include file-------"
+	-${OUT} test_validation/multi_include.asm test_validation/a.asm -o out.txt -B
 
 	
 
