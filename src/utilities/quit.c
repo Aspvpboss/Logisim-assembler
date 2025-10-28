@@ -1,4 +1,5 @@
 #include "quit.h"
+#include "print_functions.h"
 #include "assert.h"
 
 
@@ -39,9 +40,6 @@ void free_tokenized_line(Token_Line *tl){
 void free_tokenized_file(Token_File *tf){
 
 
-    if(!tf)
-        return;
-
     t_free(tf->file);
 
     if(tf->is_included)
@@ -62,7 +60,6 @@ void free_tokenized_file(Token_File *tf){
 
     tf->head = NULL;
     tf->tail = NULL;
-
     
 }
 
@@ -73,12 +70,9 @@ void free_tok_file_manager(Token_File_Manager *manager){
     }
 
     for(int i = 0; i < manager->amount_files; i++){
-        //assert(manager->tk_files[i] == NULL);
         free_tokenized_file(manager->tk_files[i]);
         t_free(manager->tk_files[i]);
     }
-
-    printf("burger\n");
     
     t_free(manager->tk_files);
 }

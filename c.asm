@@ -1,7 +1,7 @@
 
 
 
-.include "d.asm"
+.include "a.asm"
 
 .glob 
 

@@ -99,9 +99,6 @@ int include_new_file(Token_Line *current, Token_File_Manager *token_manager, Err
 
     if(include_file->is_included){
 
-        include_file->is_included = 0;
-        current->next = include_file->tail->next;
-        include_file->tail->next = NULL;
         Set_ErrorData(result, 2, current->original_line, current->tk[2].text, current->file);
         return 1;
     }
