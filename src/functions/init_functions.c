@@ -8,6 +8,7 @@ int validate_paths(const char *file_path, const char *file_type){
     size_t len_path = strlen(file_path);
     size_t len_type = strlen(file_type);
 
+
     if(len_path < len_type){
         return 0;
     }
@@ -31,20 +32,20 @@ int validate_paths(const char *file_path, const char *file_type){
 
 
 
-int parse_output_file(File_Manager *manager, char **argv, int argc, int i, ErrorData *result){
+int parse_output_file(File_Manager *manager, char **argv, int argc, int *i, ErrorData *result){
 
 
-    if(strcmp(argv[i], "-o") == 0 && i + 1 < argc){
+    if(strcmp(argv[*i], "-o") == 0 && *i + 1 < argc){
 
-        if(!validate_paths(argv[i + 1], ".txt")){
-            Set_ErrorData(result, 2, 0, argv[i + 1], NULL);
+        if(!validate_paths(argv[*i + 1], ".txt")){
+            Set_ErrorData(result, 2, 0, argv[*i + 1], NULL);
             return -1;
         }
 
-        manager->output.path = t_strdup(argv[i + 1]);
+        manager->output.path = t_strdup(argv[*i + 1]);
         manager->output.file = NULL;
         manager->output.num_lines = 0;
-        i++;
+        (*i)++;
 
         return 1;
     }
