@@ -32,11 +32,6 @@ int parse_command_args(Appstate *state, int argc, char *argv[], ErrorData *resul
             return 1;
         
 
-        // if(strcmp(argv[i], "-d") == 0 && i + 1 < argc){
-
-            
-
-        // }
 
         function_ret = parse_output_types(configs, argv, i, result);
         if(function_ret == 1)

@@ -102,3 +102,24 @@ int parse_input_files(File_Manager *manager, char **argv, int i){
 
     return 0;
 }
+
+
+int parse_debug_flags(Assembler_Configs *configs, char *_arg){
+
+    int amount_debug = configs->amount_debug;
+
+    if(strcmp(_arg, "-all_debug") == 0){
+
+    }
+    if(strcmp(_arg, "-symbol_info") == 0){
+
+    }
+    if(strcmp(_arg, "-premacro_dump") == 0){
+
+    }
+    if(strcmp(_arg, "-postmacro_dump") == 0){
+
+    }
+
+    return 0;
+}
