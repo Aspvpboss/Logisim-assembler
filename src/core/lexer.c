@@ -63,7 +63,7 @@ enum Token_Type lex_token(Token *token){
 
 
 
-int lex_token_line(Token_Line *token_line, Symbol_Table *symbols){
+int lex_token_line(Token_Line *token_line, Symbol_Table *symbols, ErrorData *result){
 
     Token *current_token = NULL;
     Token *previous_token = NULL;
@@ -123,7 +123,8 @@ int lex_token_line(Token_Line *token_line, Symbol_Table *symbols){
                 break;
         }
 
-        append_symbols(previous_token, current_token, symbols, token_line);
+        if(append_symbols(previous_token, current_token, symbols, token_line, result))
+            return 1;
 
         previous_token = current_token;
     }
@@ -192,7 +193,8 @@ int lex_file(Token_File *file, Symbol_Table *symbols, ErrorData *result){
     while(current){
 
         current->symbol_table = symbols;
-        lex_token_line(current, symbols);
+        if(lex_token_line(current, symbols, result))
+            return 1;
         current = current->next;
 
     }    
@@ -232,7 +234,18 @@ int lexical_analysis(Appstate *state){
         manager->tk_files[i]->symbol_table = &symbols->tables[i];
 
         if(lex_file(manager->tk_files[i], &symbols->tables[i], &result)){
-            LogError(MACRO_ERROR, &result);
+
+            if(result.specific_code == 8){
+
+                LogError(LINKER_ERROR, &result);
+
+            } else{
+
+                LogError(MACRO_ERROR, &result);
+
+            }
+
+            
             return 1;
         }
 

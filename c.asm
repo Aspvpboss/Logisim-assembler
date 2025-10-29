@@ -1,3 +1,8 @@
-.include "d.asm"
 
-.glob some_label
+
+
+.include "a.asm"
+
+.glob 
+
+.inline_macro BurgerKing stuff

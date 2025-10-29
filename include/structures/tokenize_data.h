@@ -113,7 +113,8 @@ typedef struct{
     Token_Line *tail;
     uint16_t amount_lines;
     char *file;
-    bool included;
+    bool is_included;
+    bool is_root;
     void *symbol_table;
 
 } Token_File;

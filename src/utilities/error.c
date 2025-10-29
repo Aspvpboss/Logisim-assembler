@@ -65,7 +65,7 @@ void LogError(ErrorCode general_error, ErrorData *result){
                     break;
             
                 case(3):
-                    fprintf(stderr, "File error: an input file is empty\n");
+                    fprintf(stderr, "File error: an input file '%s' is empty\n", result->string);
                     break;
 
 
@@ -114,8 +114,28 @@ void LogError(ErrorCode general_error, ErrorData *result){
                 case(4):
                     fprintf(stderr, "Linker error: must include '%s' before using .extern on it, at line '%d' in file '%s'\n\n",
                             result->string, result->integer_data, result->file_name);
-
                     break;
+                case(5):
+                    fprintf(stderr, "Linker error: '%s' cannot include itself, at line '%d' in file '%s'\n\n",
+                            result->string, result->integer_data, result->file_name);
+                    break;
+                case(6):
+                    fprintf(stderr, "Linker error: tried to include duplicate symbol into '%s', at line '%d' in file '%s'\n\nDid you .include more than once?",
+                            result->string, result->integer_data, result->file_name);
+                    break;
+                case(7):
+                    fprintf(stderr, "Linker error: tried to extern duplicate symbol into '%s', at line '%d' in file '%s'\n\nDid you .extern more than once?",
+                            result->string, result->integer_data, result->file_name);
+                    break;
+                case(8):
+                    fprintf(stderr, "Linker error: duplicate symbol '%s', at line '%d' in file '%s'\n\n",
+                            result->string, result->integer_data, result->file_name);
+                    break;     
+                case(9):
+                    fprintf(stderr, "Linker error: cannot include root file '%s', at line '%d' in file '%s'\n\n",
+                            result->string, result->integer_data, result->file_name);
+                    break;     
+                                               
 
                 default: break;
 
@@ -130,6 +150,7 @@ void LogError(ErrorCode general_error, ErrorData *result){
 
     t_free(result->string); 
     t_free(result->file_name);
+
 }
 
 
