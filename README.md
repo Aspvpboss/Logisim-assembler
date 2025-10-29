@@ -4,6 +4,7 @@ this is a assembler for my redstone computer
 --things to work on--
 
 
+revamp init.c to be more readable, dear god
 debug flags for assembler, aka print dump file or symbols
 macros stuff
 

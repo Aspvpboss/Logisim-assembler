@@ -66,11 +66,11 @@ int parse_command_args(Appstate *state, int argc, char *argv[], ErrorData *resul
             continue;
         }
 
-        if(strcmp(argv[i], "-d") == 0 && i + 1 < argc){
+        // if(strcmp(argv[i], "-d") == 0 && i + 1 < argc){
 
             
 
-        }
+        // }
 
 
         if(strcmp(argv[i], "-B") == 0){
