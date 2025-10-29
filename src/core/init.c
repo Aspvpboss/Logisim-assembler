@@ -40,6 +40,10 @@ int parse_command_args(Appstate *state, int argc, char *argv[], ErrorData *resul
     manager->amount_inputs = 0;
     manager->output.path = NULL;
 
+    configs->debug_info = NULL;
+    configs->amount_debug = 0;
+    configs->output_type = NO_OUTPUT;
+
     if(argc <= 1){
         Set_ErrorData(result, 4, 0, NULL, NULL);
         return 1;
@@ -61,6 +65,13 @@ int parse_command_args(Appstate *state, int argc, char *argv[], ErrorData *resul
 
             continue;
         }
+
+        if(strcmp(argv[i], "-d") == 0 && i + 1 < argc){
+
+            
+
+        }
+
 
         if(strcmp(argv[i], "-B") == 0){
 
@@ -208,7 +219,6 @@ int initialize(Appstate *state, int argc, char **argv){
 
     state->manager.inputs = NULL;
     state->manager.output.raw_text = NULL;
-    state->configs.output_type = NO_OUTPUT;
 
 
     if(parse_command_args(state, argc, argv, &result)){
