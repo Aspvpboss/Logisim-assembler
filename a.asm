@@ -7,6 +7,8 @@ add
 add
 add
 
+some_label:
+
 .glob some_label
 
 at 0x00
