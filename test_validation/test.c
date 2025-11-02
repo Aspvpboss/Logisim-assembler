@@ -21,7 +21,7 @@ void exit_testing(const char *test_name){
 
 void test(const char *cmd, bool wanted_result, const char *test_name){
 
-    printf("\n[-]-----Running: %s-----[-]\n", test_name);
+    printf("\n[-]-----Running: %s-----[-]\n===============================\n", test_name);
 
     int result = system(cmd);
 
@@ -30,7 +30,7 @@ void test(const char *cmd, bool wanted_result, const char *test_name){
         if(!wanted_result)
             exit_testing(test_name);
 
-        printf("--------------------------\n\nSuccess - %s\n\n--------------------------\n", test_name);
+        printf("===============================\n\nSuccess - %s\n\n", test_name);
         return;
 
     }
@@ -38,7 +38,7 @@ void test(const char *cmd, bool wanted_result, const char *test_name){
     if(wanted_result)
         exit_testing(test_name);
     
-    printf("--------------------------\nSuccess - %s\n\n--------------------------\n", test_name);
+    printf("===============================\nSuccess - %s\n\n", test_name);
     return;
 }
 
