@@ -8,7 +8,6 @@ add
 
 .include "c.asm"
 
-<<<<<<< HEAD
 add
 add
 add
@@ -18,8 +17,6 @@ some_label:
 
 .glob some_label
 
-=======
->>>>>>> e60f5a8a53fac5a789fe331f9df59be2f0905ca1
 at 0x00
 
 .glob MUL_3

@@ -2,9 +2,10 @@ GCC = gcc
 #GCC = C:\MinGW\bin\gcc.exe -IC:\MinGW\include
 
 SRC = src/*.c src/utilities/*.c src/core/*.c src/functions/*.c
-INCLUDE = -Iinclude -Iinclude/functions -Iinclude/structures -Iinclude/core -Iinclude/utilities
+INCLUDE = -Iinclude -Iinclude/functions -Iinclude/structures -Iinclude/core -Iinclude/utilities -IC:\msys64\mingw64\include
 
 LINK = -lMemTrack
+LIBS = -LC:\msys64\mingw64\lib
 
 OUT = rca.exe
 
@@ -45,32 +46,6 @@ test_build:
 test_run:
 
 	@./test.exe
-
-# 	@echo "-------No command args-------"
-# 	-${OUT}
-# 	@echo "-------No output file-------"
-# 	-${OUT} test_validation/empty.asm
-# 	@echo "-------Invalid command arg-------"
-# 	-${OUT} test_validation/empty.asm -o
-# 	@echo "-------No output type flag-------"
-# 	-${OUT} test_validation/empty.asm -o out.txt
-# 	@echo "-------Duplicate output type flags-------"
-# 	-${OUT} test_validation/empty.asm -o out.txt -B -B
-# 	@echo "-------Empty file-------"
-# 	-${OUT} test_validation/empty.asm -o out.txt -B
-# 	@echo "-------Failed to find input file-------"
-# 	-${OUT} nothing.asm -o out.txt -B
-# 	@echo "-------Invalid output file type-------"
-# 	-${OUT} test_validation/empty.asm -o out.asm -B
-# 	@echo "-------Inline macro error-------"
-# 	-${OUT} test_validation/inline_macro.asm -o out.txt -B
-# 	@echo "-------Multi macro error-------"
-# 	-${OUT} test_validation/multi_macro.asm -o out.txt -B
-# 	@echo "-------Cannot find .include file-------"
-# 	-${OUT} test_validation/no_find_include.asm -o out.txt -B
-# 	@echo "-------Double .include file-------"
-# 	-${OUT} test_validation/multi_include.asm test_validation/a.asm -o out.txt -B
-
 	
 
 debug_run:
