@@ -20,7 +20,7 @@ int main(int argc, char **argv){
 
     Appstate state = {0};
 
-    
+    Set_Malloc_Error_Function(quit, NULL);
 
     if(initialize(&state, argc, argv)){
         quit(&state);
@@ -47,8 +47,6 @@ int main(int argc, char **argv){
     }
 
     quit(&state);
-
-    
 
     return 0;
 }
