@@ -22,6 +22,15 @@ int main(int argc, char **argv){
 
     
 
+    MemTrack_Context ctx;
+    Set_MemTrack_Context(&ctx);
+    Set_Malloc_Error_Function(quit, &state);
+    ctx.config.auto_null_pointers = true;
+    ctx.config.memory_failure_abort = true;
+    ctx.config.print_error_info = true;
+
+
+
     if(initialize(&state, argc, argv)){
         quit(&state);
         return 1;

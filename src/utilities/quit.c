@@ -150,9 +150,9 @@ void free_symbol_table_manager(Symbol_Table_Manager *manager){
 }
 
 
-void quit(Appstate *state){
+void quit(void *appstate){
 
-    
+    Appstate *state = (Appstate*)appstate;
 
     free_file_manager(&state->manager);
 
