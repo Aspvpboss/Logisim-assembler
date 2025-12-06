@@ -19,8 +19,7 @@
 int main(int argc, char **argv){
 
     Appstate state = {0};
-
-    Set_Malloc_Error_Function(quit, NULL);
+          
 
     MemTrack_Context ctx;
     Set_MemTrack_Context(&ctx);
@@ -29,7 +28,7 @@ int main(int argc, char **argv){
     ctx.config.memory_failure_abort = true;
     ctx.config.print_error_info = true;
 
-
+    
 
     if(initialize(&state, argc, argv)){
         quit(&state);

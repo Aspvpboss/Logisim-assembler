@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "tokenize_data.h": "c",
-        "linker_functions.h": "c",
-        "stdint.h": "c",
-        "symbol_functions.h": "c"
-    },
-    "makefile.configureOnOpen": false
-}

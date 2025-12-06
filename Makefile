@@ -1,11 +1,11 @@
-GCC = gcc
-#GCC = C:\MinGW\bin\gcc.exe -IC:\MinGW\include
 
-SRC = src/*.c src/utilities/*.c src/core/*.c src/functions/*.c
-INCLUDE = -Iinclude -Iinclude/functions -Iinclude/structures -Iinclude/core -Iinclude/utilities -IC:\msys64\mingw64\include
+GCC = gcc
+
+SRC = ${wildcard src/*.c src/utilities/*.c src/core/*.c src/functions/*.c}
+INCLUDE = -Iinclude -Iinclude/functions -Iinclude/structures -Iinclude/core -Iinclude/utilities -IC:/msys64/mingw64/include
 
 LINK = -lMemTrack
-LIBS = -LC:\msys64\mingw64\lib
+LIBS = -LC:/msys64/mingw64/lib
 
 OUT = rca.exe
 
@@ -18,13 +18,20 @@ ERROR = -Wall -Werror -Wpedantic
 
 OPTIMIZATIONS = -Os -ffunction-sections -fdata-sections -Wl,--gc-sections -s
 
-default: build run
 
-debug: build debug_run
 
-test: test_build test_run
+default: json_build build run
 
-opt: optimize_build run
+debug: json_build build debug_run
+
+test: json_build test_run
+
+opt: json_build optimize_build run
+
+
+json_build:
+	@compiledb -n -- make build
+	@compiledb -n -- make test_build
 
 
 optimize_build:
@@ -35,12 +42,10 @@ build:
 
 
 run:
-	@${OUT} ${COMMAND_ARGS}
+	${OUT} ${COMMAND_ARGS}
 
-
-test_build: 
-
-	@${GCC} test_validation/test.c -o ./test.exe 
+test_build: 		
+	@${GCC} test_validation/test.c -o ./test.exe -IC:/msys64/mingw64/include
 
 
 test_run:
@@ -50,3 +55,5 @@ test_run:
 
 debug_run:
 	@gdb ${OUT}
+
+

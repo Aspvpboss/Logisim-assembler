@@ -9,7 +9,7 @@ xor
 
 ldi
 rtr
-lod
+mod
 str 
 rpc
 pcr

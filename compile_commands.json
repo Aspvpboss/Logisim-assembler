@@ -1,0 +1,106 @@
+[
+ {
+  "directory": "C:/main/program/C/workbench/Realm-Computer-assembler",
+  "arguments": [
+   "gcc",
+   "-g",
+   "-DTRACK_ALLOCATIONS",
+   "-Wall",
+   "-Werror",
+   "-Wpedantic",
+   "-Iinclude",
+   "-Iinclude/functions",
+   "-Iinclude/structures",
+   "-Iinclude/core",
+   "-Iinclude/utilities",
+   "-IC:/msys64/mingw64/include",
+   "src/main.c"
+  ],
+  "file": "src/main.c"
+ },
+ {
+  "directory": "C:/main/program/C/workbench/Realm-Computer-assembler",
+  "arguments": [
+   "gcc",
+   "-g",
+   "-DTRACK_ALLOCATIONS",
+   "-Wall",
+   "-Werror",
+   "-Wpedantic",
+   "-Iinclude",
+   "-Iinclude/functions",
+   "-Iinclude/structures",
+   "-Iinclude/core",
+   "-Iinclude/utilities",
+   "-IC:/msys64/mingw64/include",
+   "src/utilities/debug.c"
+  ],
+  "file": "src/utilities/debug.c"
+ },
+ {
+  "directory": "C:/main/program/C/workbench/Realm-Computer-assembler",
+  "arguments": [
+   "gcc",
+   "-g",
+   "-DTRACK_ALLOCATIONS",
+   "-Wall",
+   "-Werror",
+   "-Wpedantic",
+   "-Iinclude",
+   "-Iinclude/functions",
+   "-Iinclude/structures",
+   "-Iinclude/core",
+   "-Iinclude/utilities",
+   "-IC:/msys64/mingw64/include",
+   "src/utilities/error.c"
+  ],
+  "file": "src/utilities/error.c"
+ },
+ {
+  "directory": "C:/main/program/C/workbench/Realm-Computer-assembler",
+  "arguments": [
+   "gcc",
+   "-g",
+   "-DTRACK_ALLOCATIONS",
+   "-Wall",
+   "-Werror",
+   "-Wpedantic",
+   "-o",
+   "rca.exe",
+   "src/main.c",
+   "src/utilities/debug.c",
+   "src/utilities/error.c",
+   "src/utilities/print_functions.c",
+   "src/utilities/quit.c",
+   "src/core/init.c",
+   "src/core/lexer.c",
+   "src/core/linker.c",
+   "src/core/tokenize.c",
+   "src/functions/init_functions.c",
+   "src/functions/lexer_functions.c",
+   "src/functions/linker_functions.c",
+   "src/functions/macro_functions.c",
+   "src/functions/symbol_functions.c",
+   "-Iinclude",
+   "-Iinclude/functions",
+   "-Iinclude/structures",
+   "-Iinclude/core",
+   "-Iinclude/utilities",
+   "-IC:/msys64/mingw64/include",
+   "-LC:/msys64/mingw64/lib",
+   "-lMemTrack"
+  ],
+  "file": "src/functions/symbol_functions.c"
+ },
+ {
+  "directory": "C:/main/program/C/workbench/Realm-Computer-assembler",
+  "arguments": [
+   "gcc",
+   "test_validation/test.c",
+   "-o",
+   "./test.exe",
+   "-IC:/msys64/mingw64/include"
+  ],
+  "file": "test_validation/test.c"
+ }
+]
